@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<package xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <metadata xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+    <id>Appccelerate.VersionTask</id>
+    <version>0.0.0-alpha0006</version>
+    <title>Appccelerate.VersionTask</title>
+    <authors>Appccelerate team</authors>
+    <owners>Appccelerate team</owners>
+    <licenseUrl>http://www.apache.org/licenses/LICENSE-2.0.html</licenseUrl>
+    <projectUrl>https://github.com/appccelerate/Version</projectUrl>
+    <iconUrl>https://github.com/appccelerate/appccelerate/raw/master/docs/nuget.png</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <summary>MSBuild task for automatic versioning of assemblies.</summary>
+    <description>MSBuild task for automatic versioning of assemblies.</description>
+    <copyright>Copyright 2014</copyright>
+    <tags>Appccelerate, MSBuild</tags>
+    <developmentDependency>true</developmentDependency>
+    <dependencies/>	
+  </metadata>
+  <files>
+    <file src="bin\Release\Appccelerate.VersionTask.dll" target="" />
+    <file src="bin\Release\Appccelerate.VersionTask.pdb" target="" />
+    <file src="bin\Release\Appccelerate.Version.dll" target="" />
+    <file src="bin\Release\Appccelerate.Version.pdb" target="" />
+    <file src="bin\Release\LibGit2Sharp.dll" target="" />
+    <file src="bin\Release\NativeBinaries\amd64\git2-90befde.dll" target="NativeBinaries\amd64\" />
+    <file src="bin\Release\NativeBinaries\amd64\git2-90befde.pdb" target="NativeBinaries\amd64\" />
+    <file src="bin\Release\NativeBinaries\x86\git2-90befde.dll" target="NativeBinaries\x86\" />
+    <file src="bin\Release\NativeBinaries\x86\git2-90befde.dll" target="NativeBinaries\x86\" />
+    
+    <file src="Appccelerate.VersionTask.targets" target="build" />
+  </files>  
+</package>
