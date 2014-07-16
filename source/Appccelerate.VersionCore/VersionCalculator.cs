@@ -36,9 +36,11 @@ namespace Appccelerate.Version
             Match match = r.Match(versionPattern);
             if (match.Success)
             {
-                int i = int.Parse(match.Value.Substring(1, match.Value.Length - 2));
-
-                versionPattern = versionPattern.Replace(match.Value, (i + commitsSinceLastTaggedVersion).ToString(CultureInfo.InvariantCulture));
+                int placeholderLength = match.Value.Length - 2;
+                int baseNumber = int.Parse(match.Value.Substring(1, placeholderLength));
+                int calculatedNumber = baseNumber + commitsSinceLastTaggedVersion;
+                string paddedCalculatedNumber = calculatedNumber.ToString(new string('0', placeholderLength));
+                versionPattern = versionPattern.Replace(match.Value, paddedCalculatedNumber);
             }
 
             int dashIndex = versionPattern.IndexOf('-');

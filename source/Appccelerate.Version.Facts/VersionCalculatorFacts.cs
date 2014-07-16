@@ -68,6 +68,14 @@ namespace Appccelerate.Version.Facts
         }
 
         [Fact]
+        public void KeepsFormattingOfPlaceholder()
+        {
+            VersionInformation result = this.testee.CalculateVersion("1-pre{0002}", null, 125);
+
+            result.Should().Be(new VersionInformation(new Version("1.0.0.0"), "1.0.0-pre0127", string.Empty));
+        }
+
+        [Fact]
         public void SupportsNugetPreReleaseVersions()
         {
             VersionInformation result = this.testee.CalculateVersion("1.2.3-pre", null, 0);
