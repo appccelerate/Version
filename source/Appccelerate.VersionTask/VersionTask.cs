@@ -7,7 +7,7 @@
     using System.Xml.Linq;
 
     using Appccelerate.Version;
-
+    using LibGit2Sharp;
     using Microsoft.Build.Framework;
     using Microsoft.Build.Utilities;
 
@@ -48,6 +48,13 @@
                 base.Log.LogMessage(MessageImportance.Normal, "Version: " + version.Version);
                 base.Log.LogMessage(MessageImportance.Normal, "NugetVersion: " + version.NugetVersion);
                 base.Log.LogMessage(MessageImportance.Normal, "InformationalVersion:" + version.InformationalVersion);
+                base.Log.LogMessage(MessageImportance.Normal, "IsPullRequest:" + repositoryVersionInformation.IsPullRequest);
+
+                string repositoryPath = Repository.Discover(startingPath);
+
+                var repository = new Repository(repositoryPath);
+
+                base.Log.LogMessage(MessageImportance.Normal, "working on branch: " + repository.Head.CanonicalName);
 
 
                 string versionAssemblyInfo = string.Format(@"
