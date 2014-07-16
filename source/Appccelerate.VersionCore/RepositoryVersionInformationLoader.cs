@@ -14,8 +14,7 @@
 
             var repository = new Repository(repositoryPath);
 
-            RepositoryVersionInformation repositoryVersionInformation = this.GetRepositoryVersionInformation(repository);
-            return repositoryVersionInformation;
+            return this.GetRepositoryVersionInformation(repository);
         }
 
         public RepositoryVersionInformation GetRepositoryVersionInformation(Repository repository)
@@ -44,7 +43,8 @@
             return new RepositoryVersionInformation(
                 latestVersionTag.Name.Substring(2),
                 commits,
-                latestVersionTag.IsAnnotated ? latestVersionTag.Annotation.Message.Replace("\n", "").Replace("\r", "") : string.Empty);
+                latestVersionTag.IsAnnotated ? latestVersionTag.Annotation.Message.Replace("\n", string.Empty).Replace("\r", string.Empty) : string.Empty,
+                repository.Head.CanonicalName.Contains("/pull/"));
         }
     }
 }

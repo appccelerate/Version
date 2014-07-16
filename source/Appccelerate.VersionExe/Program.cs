@@ -39,7 +39,8 @@ namespace Appccelerate.Version
                 var version = calculator.CalculateVersion(
                     repositoryVersionInformation.LastTaggedVersion,
                     repositoryVersionInformation.AnnotationMessage,
-                    repositoryVersionInformation.CommitsSinceLastTaggedVersion);
+                    repositoryVersionInformation.CommitsSinceLastTaggedVersion,
+                    repositoryVersionInformation.IsPullRequest);
 
                 Console.WriteLine("{");
                 Console.WriteLine("Version:  " + version.Version);

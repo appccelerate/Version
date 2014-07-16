@@ -42,7 +42,8 @@
                 var version = calculator.CalculateVersion(
                     repositoryVersionInformation.LastTaggedVersion,
                     repositoryVersionInformation.AnnotationMessage,
-                    repositoryVersionInformation.CommitsSinceLastTaggedVersion);
+                    repositoryVersionInformation.CommitsSinceLastTaggedVersion,
+                    repositoryVersionInformation.IsPullRequest);
 
                 base.Log.LogMessage(MessageImportance.Normal, "Version: " + version.Version);
                 base.Log.LogMessage(MessageImportance.Normal, "NugetVersion: " + version.NugetVersion);

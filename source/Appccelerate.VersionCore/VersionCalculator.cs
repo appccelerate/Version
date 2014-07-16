@@ -24,7 +24,11 @@ namespace Appccelerate.Version
 
     public class VersionCalculator
     {
-        public VersionInformation CalculateVersion(string versionPattern, string informationalVersionPattern, int commitsSinceLastTaggedVersion)
+        public VersionInformation CalculateVersion(
+            string versionPattern, 
+            string informationalVersionPattern, 
+            int commitsSinceLastTaggedVersion,
+            bool isPullRequest)
         {
             informationalVersionPattern = informationalVersionPattern ?? string.Empty;
 
@@ -45,6 +49,8 @@ namespace Appccelerate.Version
 
             int dashIndex = versionPattern.IndexOf('-');
             string prerelease = dashIndex > 0 ? versionPattern.Substring(dashIndex + 1) : string.Empty;
+
+            prerelease = isPullRequest ? "PullRequest" : prerelease;
 
             string version = dashIndex > 0 ? versionPattern.Substring(0, dashIndex) : versionPattern;
 
