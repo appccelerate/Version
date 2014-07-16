@@ -11,7 +11,7 @@
     <AssemblyName>Appccelerate.Version</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <NuGetPackageImportStamp>7d2e0fbc</NuGetPackageImportStamp>
+    <NuGetPackageImportStamp>1a1793cd</NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -70,12 +70,12 @@ xcopy /s /y /d "$(SolutionDir)packages\LibGit2Sharp.0.18.1.0\lib\net40\NativeBin
 if not exist "$(TargetDir)NativeBinaries\amd64" md "$(TargetDir)NativeBinaries\amd64"
 xcopy /s /y /d "$(SolutionDir)packages\LibGit2Sharp.0.18.1.0\lib\net40\NativeBinaries\amd64\*.*" "$(TargetDir)NativeBinaries\amd64"</PostBuildEvent>
   </PropertyGroup>
-  <Import Project="..\packages\Appccelerate.VersionTask.0.1.0-pre0009\build\Appccelerate.VersionTask.targets" Condition="Exists('..\packages\Appccelerate.VersionTask.0.1.0-pre0009\build\Appccelerate.VersionTask.targets')" />
+  <Import Project="..\packages\Appccelerate.VersionTask.0.1.0-pre0014\build\Appccelerate.VersionTask.targets" Condition="Exists('..\packages\Appccelerate.VersionTask.0.1.0-pre0014\build\Appccelerate.VersionTask.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\packages\Appccelerate.VersionTask.0.1.0-pre0009\build\Appccelerate.VersionTask.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Appccelerate.VersionTask.0.1.0-pre0009\build\Appccelerate.VersionTask.targets'))" />
+    <Error Condition="!Exists('..\packages\Appccelerate.VersionTask.0.1.0-pre0014\build\Appccelerate.VersionTask.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Appccelerate.VersionTask.0.1.0-pre0014\build\Appccelerate.VersionTask.targets'))" />
   </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
