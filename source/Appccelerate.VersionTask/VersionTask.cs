@@ -35,7 +35,7 @@
 
                 RepositoryVersionInformation repositoryVersionInformation = repositoryVersionInformationLoader.GetRepositoryVersionInformation(startingPath);
 
-                Log.LogMessage(MessageImportance.Normal, "version pattern = " + repositoryVersionInformation.LastTaggedVersion + " + " + repositoryVersionInformation.CommitsSinceLastTaggedVersion);
+                base.Log.LogMessage(MessageImportance.Normal, "version pattern = " + repositoryVersionInformation.LastTaggedVersion + " + " + repositoryVersionInformation.CommitsSinceLastTaggedVersion);
 
                 var calculator = new VersionCalculator();
 
@@ -44,9 +44,9 @@
                     repositoryVersionInformation.AnnotationMessage,
                     repositoryVersionInformation.CommitsSinceLastTaggedVersion);
 
-                Log.LogMessage(MessageImportance.Normal, "Version: " + version.Version);
-                Log.LogMessage(MessageImportance.Normal, "NugetVersion: " + version.NugetVersion);
-                Log.LogMessage(MessageImportance.Normal, "InformationalVersion:" + version.InformationalVersion);
+                base.Log.LogMessage(MessageImportance.Normal, "Version: " + version.Version);
+                base.Log.LogMessage(MessageImportance.Normal, "NugetVersion: " + version.NugetVersion);
+                base.Log.LogMessage(MessageImportance.Normal, "InformationalVersion:" + version.InformationalVersion);
 
 
                 string versionAssemblyInfo = string.Format(@"
@@ -87,19 +87,24 @@ using System.Reflection;
                 File.WriteAllText(this.TempAssemblyInfoFilePath, versionAssemblyInfo);
 
 
-                TeamCity.WriteSetVersionMessage(version.NugetVersion);
-                TeamCity.WriteSetParameterMessage("Version", version.Version.ToString());
-                TeamCity.WriteSetParameterMessage("InformationalVersion", version.InformationalVersion);
-                TeamCity.WriteSetParameterMessage("NugetVersion", version.NugetVersion);
+                TeamCity.WriteSetVersionMessage(version.NugetVersion, this.Log);
+                TeamCity.WriteSetParameterMessage("Version", version.Version.ToString(), this.Log);
+                TeamCity.WriteSetParameterMessage("InformationalVersion", version.InformationalVersion, this.Log);
+                TeamCity.WriteSetParameterMessage("NugetVersion", version.NugetVersion, this.Log);
 
                 return true;
             }
             catch (Exception exception)
             {
-                Log.LogErrorFromException(exception);
+                base.Log.LogErrorFromException(exception);
                 
                 return false;
             }
+        }
+
+        private void Log(string message)
+        {
+            base.Log.LogMessage(MessageImportance.Normal, message);
         }
     }
 }

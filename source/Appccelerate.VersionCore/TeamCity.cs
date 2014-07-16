@@ -4,18 +4,18 @@
 
     public class TeamCity
     {
-        public static void WriteSetParameterMessage(string name, string value)
+        public static void WriteSetParameterMessage(string name, string value, Action<string> log)
         {
             string escapedValue = EscapeValue(value);
 
-            Console.WriteLine("##teamcity[setParameter name='Appccelerate.Version.{0}' value='{1}']", name, escapedValue);
-            Console.WriteLine("##teamcity[setParameter name='system.Appccelerate.Version.{0}' value='{1}']", name, escapedValue);
+            log(string.Format("##teamcity[setParameter name='Appccelerate.Version.{0}' value='{1}']", name, escapedValue));
+            log(string.Format("##teamcity[setParameter name='system.Appccelerate.Version.{0}' value='{1}']", name, escapedValue));
 
         }
 
-        public static void WriteSetVersionMessage(string versionToUseForBuildNumber)
+        public static void WriteSetVersionMessage(string versionToUseForBuildNumber, Action<string> log)
         {
-            Console.WriteLine("##teamcity[buildNumber '{0}']", EscapeValue(versionToUseForBuildNumber));
+            log(string.Format("##teamcity[buildNumber '{0}']", EscapeValue(versionToUseForBuildNumber)));
         }
 
         private static string EscapeValue(string value)
