@@ -86,6 +86,12 @@ using System.Reflection;
                 this.TempAssemblyInfoFilePath = Path.Combine(tempFolder, tempFileName);
                 File.WriteAllText(this.TempAssemblyInfoFilePath, versionAssemblyInfo);
 
+
+                TeamCity.WriteSetVersionMessage(version.NugetVersion);
+                TeamCity.WriteSetParameterMessage("Version", version.Version.ToString());
+                TeamCity.WriteSetParameterMessage("InformationalVersion", version.InformationalVersion);
+                TeamCity.WriteSetParameterMessage("NugetVersion", version.NugetVersion);
+
                 return true;
             }
             catch (Exception exception)
