@@ -69,7 +69,11 @@ using System.Reflection;
                 {
                     try
                     {
-                        File.Delete(tempFilePath);
+                        // we cannot delete just all files because they might be used in other projects currently built
+                        if (File.GetLastWriteTime(tempFilePath) < DateTime.Now.AddDays(-1))
+                        {
+                            File.Delete(tempFilePath);
+                        }
                     }
                     catch
                     {
@@ -80,7 +84,7 @@ using System.Reflection;
 
                 var tempFileName = string.Format("AssemblyInfo_{0}_{1}.g.cs", Path.GetFileNameWithoutExtension(this.ProjectFile), Path.GetRandomFileName());
                 this.TempAssemblyInfoFilePath = Path.Combine(tempFolder, tempFileName);
-                File.WriteAllText(TempAssemblyInfoFilePath, versionAssemblyInfo);
+                File.WriteAllText(this.TempAssemblyInfoFilePath, versionAssemblyInfo);
 
                 return true;
             }
