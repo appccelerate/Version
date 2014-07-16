@@ -20,8 +20,8 @@
   <files>
     <file src="bin\Release\Appccelerate.VersionTask.dll" target="" />
     <file src="bin\Release\Appccelerate.VersionTask.pdb" target="" />
-    <file src="bin\Release\Appccelerate.Version.dll" target="" />
-    <file src="bin\Release\Appccelerate.Version.pdb" target="" />
+    <file src="bin\Release\Appccelerate.VersionCore.dll" target="" />
+    <file src="bin\Release\Appccelerate.VersionCore.pdb" target="" />
     <file src="bin\Release\LibGit2Sharp.dll" target="" />
     <file src="bin\Release\NativeBinaries\amd64\git2-90befde.dll" target="NativeBinaries\amd64\" />
     <file src="bin\Release\NativeBinaries\amd64\git2-90befde.pdb" target="NativeBinaries\amd64\" />
