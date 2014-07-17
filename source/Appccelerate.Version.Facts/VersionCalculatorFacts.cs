@@ -34,16 +34,6 @@ namespace Appccelerate.Version.Facts
             this.testee = new VersionCalculator();
         }
 
-        [Fact]
-        public void Foo()
-        {
-            const string Version = "1.2.3.4";
-
-            VersionInformation result = this.testee.CalculateVersion(Version, null, 0, null);
-
-            result.Should().Be(new VersionInformation(new Version(Version), "1.2.3", string.Empty));
-        }
-
         [Theory]
         [InlineData("1")]
         [InlineData("1.0")]
@@ -142,9 +132,19 @@ namespace Appccelerate.Version.Facts
         }
 
         [Fact]
+        public void KeepsVersion_WhenVersionPatternWithoutPlaceholderAndNoCommitsSinceVersionTaggedCommit()
+        {
+            const string Version = "1.2.3.0";
+
+            VersionInformation result = this.testee.CalculateVersion(Version, null, 0, null);
+
+            result.Should().Be(new VersionInformation(new Version(Version), "1.2.3", string.Empty));
+        }
+
+        [Fact]
         public void ThrowsInvalidOperationException_WhenVersionPatternWithoutPlaceholderAndCommitsSinceVersionTaggedCommitGreaterZero()
         {
-            const string VersionPattern = "1.2";
+            const string VersionPattern = "1.2.3.0";
 
             Action action = () => this.testee.CalculateVersion(VersionPattern, null, 1, null);
 

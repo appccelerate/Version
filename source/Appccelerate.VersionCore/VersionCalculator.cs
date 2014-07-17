@@ -24,6 +24,8 @@ namespace Appccelerate.Version
 
     public class VersionCalculator
     {
+        private static readonly Regex PlaceholderRegex = new Regex(@"(?<=\{)[0-9]+(?=\})", RegexOptions.Compiled);
+
         public VersionInformation CalculateVersion(
             string versionPattern, 
             string informationalVersionPattern, 
@@ -34,17 +36,15 @@ namespace Appccelerate.Version
 
             int commentIndex = versionPattern.IndexOf('#');
             versionPattern = commentIndex > 0 ? versionPattern.Substring(0, commentIndex) : versionPattern;
-
-            var r = new Regex(@"\{[0-9]+\}");
-
-            Match match = r.Match(versionPattern);
+            
+            Match match = PlaceholderRegex.Match(versionPattern);
             if (match.Success)
             {
-                int placeholderLength = match.Value.Length - 2;
-                int baseNumber = int.Parse(match.Value.Substring(1, placeholderLength));
+                int placeholderLength = match.Value.Length;
+                int baseNumber = int.Parse(match.Value);
                 int calculatedNumber = baseNumber + commitsSinceLastTaggedVersion;
                 string paddedCalculatedNumber = calculatedNumber.ToString(new string('0', placeholderLength));
-                versionPattern = versionPattern.Replace(match.Value, paddedCalculatedNumber);
+                versionPattern = versionPattern.Replace("{" + match.Value + "}", paddedCalculatedNumber);
             }
             else
             {

@@ -37,8 +37,21 @@ namespace Appccelerate.Version
 
         public RepositoryVersionInformation GetRepositoryVersionInformation(Repository repository)
         {
-            IEnumerable<Tag> allVersionTags = repository.Tags.Where(tag => tag.Name.StartsWith("v="));
+            IEnumerable<Tag> allVersionTags = FindAllVersionTags(repository).ToArray();
+            Commit lastTaggedCommit = FindLastVersionTaggedCommit(repository, allVersionTags);
+            Tag latestVersionTag = FindLatestVersionTag(allVersionTags, lastTaggedCommit);
+            int commits = CountCommitsSinceVersionTag(repository, lastTaggedCommit);
+            string prereleaseOverride = DeterminePrereleaseOverride(repository);
 
+            return new RepositoryVersionInformation(
+                latestVersionTag.Name.Substring(2),
+                commits,
+                latestVersionTag.IsAnnotated ? latestVersionTag.Annotation.Message.Replace("\n", string.Empty).Replace("\r", string.Empty) : string.Empty,
+                prereleaseOverride);
+        }
+
+        private static Commit FindLastVersionTaggedCommit(Repository repository, IEnumerable<Tag> allVersionTags)
+        {
             Commit lastTaggedCommit =
                 repository.Head.Commits.FirstOrDefault(commit => allVersionTags.Any(tag => tag.Target == commit));
 
@@ -47,27 +60,36 @@ namespace Appccelerate.Version
                 throw new InvalidOperationException("No version tag found. Add a tag with name 'v=<version pattern>'");
             }
 
-            Tag latestVersionTag = allVersionTags.Last(tag => tag.Target.Sha == lastTaggedCommit.Sha);
+            return lastTaggedCommit;
+        }
 
-            var qf = new CommitFilter
-                         {
-                             Since = repository.Head.Tip,
-                             Until = lastTaggedCommit,
-                             SortBy = CommitSortStrategies.Topological | CommitSortStrategies.Time
-                         };
+        private static Tag FindLatestVersionTag(IEnumerable<Tag> allVersionTags, Commit lastTaggedCommit)
+        {
+            return allVersionTags.Last(tag => tag.Target.Sha == lastTaggedCommit.Sha);
+        }
 
-            int commits = repository.Commits.QueryBy(qf).Count();
+        private static IEnumerable<Tag> FindAllVersionTags(Repository repository)
+        {
+            return repository.Tags.Where(tag => tag.Name.StartsWith("v="));
+        }
 
-            string prereleaseOverride =
-                repository.Head.CanonicalName.Equals("(no branch)", StringComparison.OrdinalIgnoreCase)
-                ? "commit" + repository.Head.Tip.Sha.Substring(0, 8)
-                : null;
+        private static int CountCommitsSinceVersionTag(Repository repository, Commit lastTaggedCommit)
+        {
+            var query = new CommitFilter
+                            {
+                                Since = repository.Head.Tip,
+                                Until = lastTaggedCommit,
+                                SortBy = CommitSortStrategies.Topological | CommitSortStrategies.Time
+                            };
 
-            return new RepositoryVersionInformation(
-                latestVersionTag.Name.Substring(2),
-                commits,
-                latestVersionTag.IsAnnotated ? latestVersionTag.Annotation.Message.Replace("\n", string.Empty).Replace("\r", string.Empty) : string.Empty,
-                prereleaseOverride);
+            return repository.Commits.QueryBy(query).Count();
+        }
+
+        private static string DeterminePrereleaseOverride(Repository repository)
+        {
+            return repository.Head.CanonicalName.Equals("(no branch)", StringComparison.OrdinalIgnoreCase)
+                       ? "commit" + repository.Head.Tip.Sha.Substring(0, 8)
+                       : null;
         }
     }
 }
