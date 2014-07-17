@@ -18,11 +18,14 @@
 
 namespace Appccelerate.Version
 {
+    using System;
     using System.Linq;
     using System.Text.RegularExpressions;
 
     public class VersionCalculator
     {
+        private static readonly Regex PlaceholderRegex = new Regex(@"(?<=\{)[0-9]+(?=\})", RegexOptions.Compiled);
+
         public VersionInformation CalculateVersion(
             string versionPattern, 
             string informationalVersionPattern, 
@@ -33,17 +36,22 @@ namespace Appccelerate.Version
 
             int commentIndex = versionPattern.IndexOf('#');
             versionPattern = commentIndex > 0 ? versionPattern.Substring(0, commentIndex) : versionPattern;
-
-            var r = new Regex(@"\{[0-9]+\}");
-
-            Match match = r.Match(versionPattern);
+            
+            Match match = PlaceholderRegex.Match(versionPattern);
             if (match.Success)
             {
-                int placeholderLength = match.Value.Length - 2;
-                int baseNumber = int.Parse(match.Value.Substring(1, placeholderLength));
+                int placeholderLength = match.Value.Length;
+                int baseNumber = int.Parse(match.Value);
                 int calculatedNumber = baseNumber + commitsSinceLastTaggedVersion;
                 string paddedCalculatedNumber = calculatedNumber.ToString(new string('0', placeholderLength));
-                versionPattern = versionPattern.Replace(match.Value, paddedCalculatedNumber);
+                versionPattern = versionPattern.Replace("{" + match.Value + "}", paddedCalculatedNumber);
+            }
+            else
+            {
+                if (commitsSinceLastTaggedVersion > 0)
+                {
+                    throw new InvalidOperationException(FormatCannotVersionDueToMissingCommitsCountingPlaceholderExceptionMessage(versionPattern));
+                }
             }
 
             int dashIndex = versionPattern.IndexOf('-');
@@ -73,9 +81,14 @@ namespace Appccelerate.Version
                 .Replace("{nugetVersion}", nugetVersion);
             
             return new VersionInformation(
-                System.Version.Parse(version),
+                Version.Parse(version),
                 nugetVersion,
                 informationalVersion);
+        }
+
+        public static string FormatCannotVersionDueToMissingCommitsCountingPlaceholderExceptionMessage(string versionPattern)
+        {
+            return "Cannot calculate version because the latest version tag has no placeholder to count commits and there are commits since the tagged commit. Last version tag = " + versionPattern;
         }
     }
 }
