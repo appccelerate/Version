@@ -1,5 +1,5 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="AssemblyInfo.cs" company="Appccelerate">
+﻿//-------------------------------------------------------------------------------
+// <copyright file="GlobalAssemblyInfo.cs" company="Appccelerate">
 //   Copyright (c) 2008-2014
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,12 +14,21 @@
 //   See the License for the specific language governing permissions and
 //   limitations under the License.
 // </copyright>
-// --------------------------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------
 
 using System.Reflection;
+using System.Runtime.InteropServices;
 
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Appccelerate.VersionTask")]
-[assembly: AssemblyDescription("MSBuild task for automatic versioning of assemblies.")]
+[assembly: AssemblyCompany("Appccelerate")]
+[assembly: AssemblyProduct("Appccelerate")]
+[assembly: AssemblyCopyright("Copyright ©  2008-2014")]
+[assembly: AssemblyTrademark("")]
+[assembly: AssemblyCulture("")]
+
+// Setting ComVisible to false makes the types in this assembly not visible 
+// to COM components.  If you need to access a type in this assembly from 
+// COM, set the ComVisible attribute to true on that type.
+[assembly: ComVisible(false)]
