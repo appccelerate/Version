@@ -42,7 +42,7 @@
 
             string prereleaseOverride =
                 repository.Head.CanonicalName.Equals("(no branch)", StringComparison.OrdinalIgnoreCase)
-                ? repository.Head.Tip.Sha.Substring(0, 8)
+                ? "commit" + repository.Head.Tip.Sha.Substring(0, 8)
                 : null;
 
             return new RepositoryVersionInformation(
