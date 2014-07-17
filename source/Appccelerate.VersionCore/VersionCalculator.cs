@@ -18,7 +18,6 @@
 
 namespace Appccelerate.Version
 {
-    using System.Globalization;
     using System.Linq;
     using System.Text.RegularExpressions;
 
@@ -28,7 +27,7 @@ namespace Appccelerate.Version
             string versionPattern, 
             string informationalVersionPattern, 
             int commitsSinceLastTaggedVersion,
-            bool isPullRequest)
+            string prereleaseVersionOverride)
         {
             informationalVersionPattern = informationalVersionPattern ?? string.Empty;
 
@@ -50,7 +49,7 @@ namespace Appccelerate.Version
             int dashIndex = versionPattern.IndexOf('-');
             string prerelease = dashIndex > 0 ? versionPattern.Substring(dashIndex + 1) : string.Empty;
 
-            prerelease = isPullRequest ? "PullRequest" : prerelease;
+            prerelease = prereleaseVersionOverride ?? prerelease;
 
             string version = dashIndex > 0 ? versionPattern.Substring(0, dashIndex) : versionPattern;
 

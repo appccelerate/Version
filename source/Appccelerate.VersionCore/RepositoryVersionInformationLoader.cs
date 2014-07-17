@@ -40,11 +40,16 @@
 
             int commits = repository.Commits.QueryBy(qf).Count();
 
+            string prereleaseOverride =
+                repository.Head.CanonicalName.Equals("(no branch)", StringComparison.OrdinalIgnoreCase)
+                ? repository.Head.Tip.Sha.Substring(0, 8)
+                : null;
+
             return new RepositoryVersionInformation(
                 latestVersionTag.Name.Substring(2),
                 commits,
                 latestVersionTag.IsAnnotated ? latestVersionTag.Annotation.Message.Replace("\n", string.Empty).Replace("\r", string.Empty) : string.Empty,
-                repository.Head.CanonicalName.Contains("/pull/"));
+                prereleaseOverride);
         }
     }
 }

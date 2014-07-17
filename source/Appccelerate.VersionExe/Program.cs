@@ -31,16 +31,14 @@ namespace Appccelerate.Version
                 var repositoryVersionInformationLoader = new RepositoryVersionInformationLoader();
 
                 RepositoryVersionInformation repositoryVersionInformation = repositoryVersionInformationLoader.GetRepositoryVersionInformation(startingPath);
-
-                Console.WriteLine("version = " + repositoryVersionInformation.LastTaggedVersion + " + " + repositoryVersionInformation.CommitsSinceLastTaggedVersion);
-
+                
                 var calculator = new VersionCalculator();
 
                 var version = calculator.CalculateVersion(
                     repositoryVersionInformation.LastTaggedVersion,
                     repositoryVersionInformation.AnnotationMessage,
                     repositoryVersionInformation.CommitsSinceLastTaggedVersion,
-                    repositoryVersionInformation.IsPullRequest);
+                    repositoryVersionInformation.PrereleaseOverride);
 
                 Console.WriteLine("{");
                 Console.WriteLine("Version:  " + version.Version);

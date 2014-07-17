@@ -8,13 +8,12 @@
       TaskName="VersionTask"
       AssemblyFile="$(MSBuildThisFileDirectory)..\Appccelerate.VersionTask.dll" />
   
-  <Target Name="UpdateAssemblyInfo"
+  <Target Name="Versioning"
           BeforeTargets="CoreCompile">
     
     <VersionTask
       SolutionDirectory="$(SolutionDir)"
-      ProjectFile="$(ProjectPath)"
-      CompileFiles ="@(Compile)">
+      ProjectFile="$(ProjectPath)">
       
       <Output
         TaskParameter="TempAssemblyInfoFilePath"

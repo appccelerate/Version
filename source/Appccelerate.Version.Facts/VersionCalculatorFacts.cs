@@ -39,7 +39,7 @@ namespace Appccelerate.Version.Facts
         {
             const string Version = "1.2.3.4";
 
-            VersionInformation result = this.testee.CalculateVersion(Version, null, 0, false);
+            VersionInformation result = this.testee.CalculateVersion(Version, null, 0, null);
 
             result.Should().Be(new VersionInformation(new Version(Version), "1.2.3", string.Empty));
         }
@@ -50,7 +50,7 @@ namespace Appccelerate.Version.Facts
         [InlineData("1.0.0")]
         public void AddsMissingVersionPartsAsZeros(string versionPattern)
         {
-            VersionInformation result = this.testee.CalculateVersion(versionPattern, null, 0, false);
+            VersionInformation result = this.testee.CalculateVersion(versionPattern, null, 0, null);
 
             result.Should().Be(new VersionInformation(new Version("1.0.0.0"), "1.0.0", string.Empty));
         }
@@ -62,7 +62,7 @@ namespace Appccelerate.Version.Facts
         [InlineData("1.{2}", 5, "1.7.0.0", "1.7.0")]
         public void ReplacesPlaceholderWithNumberOfCommitsSinceVersionTaggedCommit(string versionPatterm, int commitsSinceVersionTaggedCommit, string expectedVersion, string expectedNugetVersion)
         {
-            VersionInformation result = this.testee.CalculateVersion(versionPatterm, null, commitsSinceVersionTaggedCommit, false);
+            VersionInformation result = this.testee.CalculateVersion(versionPatterm, null, commitsSinceVersionTaggedCommit, null);
 
             result.Should().Be(new VersionInformation(new Version(expectedVersion), expectedNugetVersion, string.Empty));
         }
@@ -70,7 +70,7 @@ namespace Appccelerate.Version.Facts
         [Fact]
         public void KeepsFormattingOfPlaceholder()
         {
-            VersionInformation result = this.testee.CalculateVersion("1-pre{0002}", null, 125, false);
+            VersionInformation result = this.testee.CalculateVersion("1-pre{0002}", null, 125, null);
 
             result.Should().Be(new VersionInformation(new Version("1.0.0.0"), "1.0.0-pre0127", string.Empty));
         }
@@ -78,7 +78,7 @@ namespace Appccelerate.Version.Facts
         [Fact]
         public void SupportsNugetPreReleaseVersions()
         {
-            VersionInformation result = this.testee.CalculateVersion("1.2.3-pre", null, 0, false);
+            VersionInformation result = this.testee.CalculateVersion("1.2.3-pre", null, 0, null);
 
             result.Should().Be(new VersionInformation(new Version("1.2.3.0"), "1.2.3-pre", string.Empty));
         }
@@ -86,7 +86,7 @@ namespace Appccelerate.Version.Facts
         [Fact]
         public void SupportsNugetPreReleaseVersionsWithCommitsCountingInPrereleasePart()
         {
-            VersionInformation result = this.testee.CalculateVersion("1.2.3-pre{2}", null, 3, false);
+            VersionInformation result = this.testee.CalculateVersion("1.2.3-pre{2}", null, 3, null);
 
             result.Should().Be(new VersionInformation(new Version("1.2.3.0"), "1.2.3-pre5", string.Empty));
         }
@@ -94,7 +94,7 @@ namespace Appccelerate.Version.Facts
         [Fact]
         public void SupportsNugetPreReleaseVersionsWithCommitsCountingInVersionPart()
         {
-            VersionInformation result = this.testee.CalculateVersion("1.{2}.3-pre", null, 3, false);
+            VersionInformation result = this.testee.CalculateVersion("1.{2}.3-pre", null, 3, null);
 
             result.Should().Be(new VersionInformation(new Version("1.5.3.0"), "1.5.3-pre", string.Empty));
         }
@@ -104,7 +104,7 @@ namespace Appccelerate.Version.Facts
         [InlineData("1.2-pre#comment", "1.2.0.0", "1.2.0-pre")]
         public void IgnoresComments(string versionPattern, string expectedVersion, string expectedNugetVersion)
         {
-            VersionInformation result = this.testee.CalculateVersion(versionPattern, null, 0, false);
+            VersionInformation result = this.testee.CalculateVersion(versionPattern, null, 0, null);
 
             result.Should().Be(new VersionInformation(new Version(expectedVersion), expectedNugetVersion, string.Empty));
         }
@@ -112,7 +112,7 @@ namespace Appccelerate.Version.Facts
         [Fact]
         public void ReplacesVersionPlaceholderInInformationalVersion()
         {
-            VersionInformation result = this.testee.CalculateVersion("1.{2}.3-pre", "RC 1 {version}", 3, false);
+            VersionInformation result = this.testee.CalculateVersion("1.{2}.3-pre", "RC 1 {version}", 3, null);
 
             result.Should().Be(new VersionInformation(new Version("1.5.3.0"), "1.5.3-pre", "RC 1 1.5.3.0"));
         }
@@ -120,7 +120,7 @@ namespace Appccelerate.Version.Facts
         [Fact]
         public void ReplacesNugetVersionPlaceholderInInformationalVersion()
         {
-            VersionInformation result = this.testee.CalculateVersion("1.{2}.3-pre", "RC 1 {nugetVersion}", 3, false);
+            VersionInformation result = this.testee.CalculateVersion("1.{2}.3-pre", "RC 1 {nugetVersion}", 3, null);
 
             result.Should().Be(new VersionInformation(new Version("1.5.3.0"), "1.5.3-pre", "RC 1 1.5.3-pre"));
         }
@@ -128,17 +128,17 @@ namespace Appccelerate.Version.Facts
         [Fact]
         public void AddsPrereleaseInformation_WhenItIsAPullRequest()
         {
-            VersionInformation result = this.testee.CalculateVersion("1.{2}", null, 0, true);
+            VersionInformation result = this.testee.CalculateVersion("1.{2}", null, 0, "override");
 
-            result.Should().Be(new VersionInformation(new Version("1.2.0.0"), "1.2.0-PullRequest", string.Empty));
+            result.Should().Be(new VersionInformation(new Version("1.2.0.0"), "1.2.0-override", string.Empty));
         }
 
         [Fact]
         public void ReplacesPrereleaseInformation_WhenItIsAPullRequest()
         {
-            VersionInformation result = this.testee.CalculateVersion("1.{2}-pre", null, 0, true);
+            VersionInformation result = this.testee.CalculateVersion("1.{2}-pre", null, 0, "override");
 
-            result.Should().Be(new VersionInformation(new Version("1.2.0.0"), "1.2.0-PullRequest", string.Empty));
+            result.Should().Be(new VersionInformation(new Version("1.2.0.0"), "1.2.0-override", string.Empty));
         }
     }
 }
