@@ -140,5 +140,16 @@ namespace Appccelerate.Version.Facts
 
             result.Should().Be(new VersionInformation(new Version("1.2.0.0"), "1.2.0-override", string.Empty));
         }
+
+        [Fact]
+        public void ThrowsInvalidOperationException_WhenVersionPatternWithoutPlaceholderAndCommitsSinceVersionTaggedCommitGreaterZero()
+        {
+            const string VersionPattern = "1.2";
+
+            Action action = () => this.testee.CalculateVersion(VersionPattern, null, 1, null);
+
+            action.ShouldThrow<InvalidOperationException>()
+                .And.Message.Should().Be(VersionCalculator.FormatCannotVersionDueToMissingCommitsCountingPlaceholderExceptionMessage(VersionPattern));
+        }
     }
 }

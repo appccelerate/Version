@@ -18,6 +18,7 @@
 
 namespace Appccelerate.Version
 {
+    using System;
     using System.Linq;
     using System.Text.RegularExpressions;
 
@@ -44,6 +45,13 @@ namespace Appccelerate.Version
                 int calculatedNumber = baseNumber + commitsSinceLastTaggedVersion;
                 string paddedCalculatedNumber = calculatedNumber.ToString(new string('0', placeholderLength));
                 versionPattern = versionPattern.Replace(match.Value, paddedCalculatedNumber);
+            }
+            else
+            {
+                if (commitsSinceLastTaggedVersion > 0)
+                {
+                    throw new InvalidOperationException(FormatCannotVersionDueToMissingCommitsCountingPlaceholderExceptionMessage(versionPattern));
+                }
             }
 
             int dashIndex = versionPattern.IndexOf('-');
@@ -73,9 +81,14 @@ namespace Appccelerate.Version
                 .Replace("{nugetVersion}", nugetVersion);
             
             return new VersionInformation(
-                System.Version.Parse(version),
+                Version.Parse(version),
                 nugetVersion,
                 informationalVersion);
+        }
+
+        public static string FormatCannotVersionDueToMissingCommitsCountingPlaceholderExceptionMessage(string versionPattern)
+        {
+            return "Cannot calculate version because the latest version tag has no placeholder to count commits and there are commits since the tagged commit. Last version tag = " + versionPattern;
         }
     }
 }
