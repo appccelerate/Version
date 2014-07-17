@@ -1,13 +1,10 @@
 ﻿namespace Appccelerate.VersionTask
 {
     using System;
-    using System.Collections.Generic;
     using System.IO;
-    using System.Linq;
-    using System.Xml.Linq;
 
     using Appccelerate.Version;
-
+    using LibGit2Sharp;
     using Microsoft.Build.Framework;
     using Microsoft.Build.Utilities;
 
@@ -18,9 +15,6 @@
 
         [Required]
         public string ProjectFile { get; set; }
-
-        [Required]
-        public ITaskItem[] CompileFiles { get; set; }
 
         [Output]
         public string TempAssemblyInfoFilePath { get; set; }
@@ -35,19 +29,20 @@
 
                 RepositoryVersionInformation repositoryVersionInformation = repositoryVersionInformationLoader.GetRepositoryVersionInformation(startingPath);
 
-                base.Log.LogMessage(MessageImportance.Normal, "version pattern = " + repositoryVersionInformation.LastTaggedVersion + " + " + repositoryVersionInformation.CommitsSinceLastTaggedVersion);
+                base.Log.LogMessage(MessageImportance.Normal, "version pattern = " + repositoryVersionInformation.LastTaggedVersion + ", commits since tag = " + repositoryVersionInformation.CommitsSinceLastTaggedVersion);
 
                 var calculator = new VersionCalculator();
 
                 var version = calculator.CalculateVersion(
                     repositoryVersionInformation.LastTaggedVersion,
                     repositoryVersionInformation.AnnotationMessage,
-                    repositoryVersionInformation.CommitsSinceLastTaggedVersion);
+                    repositoryVersionInformation.CommitsSinceLastTaggedVersion,
+                    repositoryVersionInformation.PrereleaseOverride);
 
                 base.Log.LogMessage(MessageImportance.Normal, "Version: " + version.Version);
                 base.Log.LogMessage(MessageImportance.Normal, "NugetVersion: " + version.NugetVersion);
                 base.Log.LogMessage(MessageImportance.Normal, "InformationalVersion:" + version.InformationalVersion);
-
+                base.Log.LogMessage(MessageImportance.Normal, "PrereleaseOverride:" + repositoryVersionInformation.PrereleaseOverride);
 
                 string versionAssemblyInfo = string.Format(@"
 using System;

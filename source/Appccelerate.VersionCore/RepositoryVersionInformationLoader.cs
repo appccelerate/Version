@@ -14,8 +14,7 @@
 
             var repository = new Repository(repositoryPath);
 
-            RepositoryVersionInformation repositoryVersionInformation = this.GetRepositoryVersionInformation(repository);
-            return repositoryVersionInformation;
+            return this.GetRepositoryVersionInformation(repository);
         }
 
         public RepositoryVersionInformation GetRepositoryVersionInformation(Repository repository)
@@ -41,10 +40,16 @@
 
             int commits = repository.Commits.QueryBy(qf).Count();
 
+            string prereleaseOverride =
+                repository.Head.CanonicalName.Equals("(no branch)", StringComparison.OrdinalIgnoreCase)
+                ? "commit" + repository.Head.Tip.Sha.Substring(0, 8)
+                : null;
+
             return new RepositoryVersionInformation(
                 latestVersionTag.Name.Substring(2),
                 commits,
-                latestVersionTag.IsAnnotated ? latestVersionTag.Annotation.Message.Replace("\n", "").Replace("\r", "") : string.Empty);
+                latestVersionTag.IsAnnotated ? latestVersionTag.Annotation.Message.Replace("\n", string.Empty).Replace("\r", string.Empty) : string.Empty,
+                prereleaseOverride);
         }
     }
 }
