@@ -30,6 +30,11 @@ namespace Appccelerate.Version
         {
             string repositoryPath = Repository.Discover(startingPath);
 
+            if (string.IsNullOrEmpty(repositoryPath))
+            {
+                throw new InvalidOperationException("The path is not part of a git repository: " + startingPath);
+            }
+
             var repository = new Repository(repositoryPath);
 
             return this.GetRepositoryVersionInformation(repository);
