@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<package xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <metadata xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+    <id>Appccelerate.Version</id>
+    <version>0.0.0.0</version>
+    <title>Appccelerate.Version</title>
+    <authors>Appccelerate</authors>
+    <owners>Appccelerate</owners>
+    <licenseUrl>http://www.apache.org/licenses/LICENSE-2.0.html</licenseUrl>
+    <projectUrl>https://github.com/appccelerate/Version</projectUrl>
+    <iconUrl>https://github.com/appccelerate/appccelerate/raw/master/docs/nuget.png</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <summary>Generates assembly and nuget version based on information from git.</summary>
+    <description>Generates assembly and nuget version based on information from git.</description>
+    <copyright>Copyright 2014</copyright>
+    <tags>Appccelerate, git, version</tags>
+    <dependencies/>	
+  </metadata>
+  <files>
+    <file src="bin\Release\Appccelerate.Version.exe" target="tools" />
+    <file src="bin\Release\Appccelerate.Version.pdb" target="tools" />
+    <file src="bin\Release\Appccelerate.VersionCore.dll" target="tools" />
+    <file src="bin\Release\Appccelerate.VersionCore.pdb" target="tools" />
+    <file src="bin\Release\LibGit2Sharp.dll" target="tools" />
+    <file src="bin\Release\NativeBinaries\amd64\git2-90befde.dll" target="tools\NativeBinaries\amd64\" />
+    <file src="bin\Release\NativeBinaries\amd64\git2-90befde.pdb" target="tools\NativeBinaries\amd64\" />
+    <file src="bin\Release\NativeBinaries\x86\git2-90befde.dll" target="tools\NativeBinaries\x86\" />
+    <file src="bin\Release\NativeBinaries\x86\git2-90befde.dll" target="tools\NativeBinaries\x86\" />
+  </files>  
+</package>
