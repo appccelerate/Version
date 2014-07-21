@@ -14,6 +14,7 @@
     <description>Generates assembly and nuget version based on information from git.</description>
     <copyright>Copyright 2014</copyright>
     <tags>Appccelerate, git, version</tags>
+    <developmentDependency>true</developmentDependency>
     <dependencies/>	
   </metadata>
   <files>
