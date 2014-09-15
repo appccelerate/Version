@@ -103,7 +103,6 @@ using System.Reflection;
                 this.TempAssemblyInfoFilePath = Path.Combine(tempFolder, tempFileName);
                 File.WriteAllText(this.TempAssemblyInfoFilePath, versionAssemblyInfo);
                 
-                TeamCity.WriteSetVersionMessage(version.NugetVersion, this.WriteToLog);
                 TeamCity.WriteSetParameterMessage("Version", version.Version.ToString(), this.WriteToLog);
                 TeamCity.WriteSetParameterMessage("InformationalVersion", version.InformationalVersion, this.WriteToLog);
                 TeamCity.WriteSetParameterMessage("NugetVersion", version.NugetVersion, this.WriteToLog);
