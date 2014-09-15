@@ -30,11 +30,6 @@ namespace Appccelerate.Version
             log(string.Format("##teamcity[setParameter name='system.Appccelerate.Version.{0}' value='{1}']", name, escapedValue));
         }
 
-        public static void WriteSetVersionMessage(string versionToUseForBuildNumber, Action<string> log)
-        {
-            log(string.Format("##teamcity[buildNumber '{0}']", EscapeValue(versionToUseForBuildNumber)));
-        }
-
         private static string EscapeValue(string value)
         {
             if (value == null)
