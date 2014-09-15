@@ -20,7 +20,7 @@ namespace Appccelerate.Version
 {
     using System;
 
-    public class TeamCity
+    public static class TeamCity
     {
         public static void WriteSetParameterMessage(string name, string value, Action<string> log)
         {
