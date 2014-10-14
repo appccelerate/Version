@@ -41,9 +41,9 @@ namespace Appccelerate.Version
                     repositoryVersionInformation.PrereleaseOverride);
 
                 Console.WriteLine("{");
-                Console.WriteLine("Version:  " + version.Version);
-                Console.WriteLine("NugetVersion: " + version.NugetVersion);
-                Console.WriteLine("InformationalVersion:" + version.InformationalVersion);
+                Console.WriteLine("\"Version\": \"" + version.Version + "\",");
+                Console.WriteLine("\"NugetVersion\": \"" + version.NugetVersion + "\",");
+                Console.WriteLine("\"InformationalVersion\": \"" + version.InformationalVersion + "\"");
                 Console.WriteLine("}");
             }
             catch (Exception exception)
