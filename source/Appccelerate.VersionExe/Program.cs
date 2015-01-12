@@ -28,6 +28,12 @@ namespace Appccelerate.Version
             {
                 string startingPath = args[0];
 
+                string output = null;
+                if (args.Length == 3 && args[1] == "--output")
+                {
+                    output = args[2];
+                }
+
                 var repositoryVersionInformationLoader = new RepositoryVersionInformationLoader();
 
                 RepositoryVersionInformation repositoryVersionInformation = repositoryVersionInformationLoader.GetRepositoryVersionInformation(startingPath);
@@ -40,11 +46,18 @@ namespace Appccelerate.Version
                     repositoryVersionInformation.CommitsSinceLastTaggedVersion,
                     repositoryVersionInformation.PrereleaseOverride);
 
-                Console.WriteLine("{");
-                Console.WriteLine("\"Version\": \"" + version.Version + "\",");
-                Console.WriteLine("\"NugetVersion\": \"" + version.NugetVersion + "\",");
-                Console.WriteLine("\"InformationalVersion\": \"" + version.InformationalVersion + "\"");
-                Console.WriteLine("}");
+                if (output == null || output == "all")
+                {
+                    Console.WriteLine("{");
+                    Console.WriteLine("\"Version\": \"" + version.Version + "\",");
+                    Console.WriteLine("\"NugetVersion\": \"" + version.NugetVersion + "\",");
+                    Console.WriteLine("\"InformationalVersion\": \"" + version.InformationalVersion + "\"");
+                    Console.WriteLine("}");
+                }
+                else if (output.ToLowerInvariant() == "nugetversion")
+                {
+                    Console.WriteLine(version.NugetVersion);
+                }
             }
             catch (Exception exception)
             {
