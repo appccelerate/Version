@@ -49,7 +49,6 @@
     <Compile Include="Properties\GlobalAssemblyInfo.cs" />
     <Compile Include="RepositoryVersionInformation.cs" />
     <Compile Include="RepositoryVersionInformationLoader.cs" />
-    <Compile Include="TeamCity.cs" />
     <Compile Include="VersionCalculator.cs" />
     <Compile Include="VersionInformation.cs" />
   </ItemGroup>
