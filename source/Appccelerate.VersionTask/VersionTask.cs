@@ -42,66 +42,19 @@ namespace Appccelerate.VersionTask
         {
             try
             {
-                string startingPath = this.SolutionDirectory;
-
-                var repositoryVersionInformationLoader = new RepositoryVersionInformationLoader();
-
-                RepositoryVersionInformation repositoryVersionInformation = repositoryVersionInformationLoader.GetRepositoryVersionInformation(startingPath);
+                var repositoryVersionInformation = this.GetRepositoryVersionInformation();
 
                 this.Log.LogMessage(MessageImportance.Normal, "version pattern = " + repositoryVersionInformation.LastTaggedVersion + ", commits since tag = " + repositoryVersionInformation.CommitsSinceLastTaggedVersion);
 
-                var calculator = new VersionCalculator();
-
-                var version = calculator.CalculateVersion(
-                    repositoryVersionInformation.LastTaggedVersion,
-                    repositoryVersionInformation.AnnotationMessage,
-                    repositoryVersionInformation.CommitsSinceLastTaggedVersion,
-                    repositoryVersionInformation.PrereleaseOverride);
+                var version = CalculateVersion(repositoryVersionInformation);
 
                 this.Log.LogMessage(MessageImportance.Normal, "Version: " + version.Version);
                 this.Log.LogMessage(MessageImportance.Normal, "NugetVersion: " + version.NugetVersion);
                 this.Log.LogMessage(MessageImportance.Normal, "InformationalVersion:" + version.InformationalVersion);
                 this.Log.LogMessage(MessageImportance.Normal, "PrereleaseOverride:" + repositoryVersionInformation.PrereleaseOverride);
 
-                string versionAssemblyInfo = string.Format(
-@"using System;
-using System.Reflection;
+                this.WriteAssemblyInfoContaining(version);
 
-[assembly: AssemblyVersion(""{0}"")]
-[assembly: AssemblyFileVersion(""{0}"")]
-[assembly: AssemblyInformationalVersion(""{1}"")]
-", 
- version.Version, 
- version.InformationalVersion);
-
-                string tempFolder = Path.Combine(Path.GetTempPath(), "Appccelerate.VersionTask");
-
-                if (!Directory.Exists(tempFolder))
-                {
-                    Directory.CreateDirectory(tempFolder);
-                }
-
-                foreach (string tempFilePath in Directory.GetFiles(tempFolder))
-                {
-                    try
-                    {
-                        // we cannot delete just all files because they might be used in other projects currently built
-                        if (File.GetLastWriteTime(tempFilePath) < DateTime.Now.AddDays(-1))
-                        {
-                            File.Delete(tempFilePath);
-                        }
-                    }
-                    // ReSharper disable once EmptyGeneralCatchClause
-                    catch
-                    {
-                        // try next time
-                    }
-                }
-                
-                var tempFileName = string.Format("AssemblyInfo_{0}_{1}.g.cs", Path.GetFileNameWithoutExtension(this.ProjectFile), Path.GetRandomFileName());
-                this.TempAssemblyInfoFilePath = Path.Combine(tempFolder, tempFileName);
-                File.WriteAllText(this.TempAssemblyInfoFilePath, versionAssemblyInfo);
-                
                 return true;
             }
             catch (Exception exception)
@@ -112,9 +65,70 @@ using System.Reflection;
             }
         }
 
-        private void WriteToLog(string message)
+        private RepositoryVersionInformation GetRepositoryVersionInformation()
         {
-            this.Log.LogMessage(MessageImportance.Normal, message);
+            string startingPath = this.SolutionDirectory;
+
+            var repositoryVersionInformationLoader = new RepositoryVersionInformationLoader();
+
+            RepositoryVersionInformation repositoryVersionInformation =
+                repositoryVersionInformationLoader.GetRepositoryVersionInformation(startingPath);
+            return repositoryVersionInformation;
+        }
+
+        private static VersionInformation CalculateVersion(RepositoryVersionInformation repositoryVersionInformation)
+        {
+            var calculator = new VersionCalculator();
+
+            var version = calculator.CalculateVersion(
+                repositoryVersionInformation.LastTaggedVersion,
+                repositoryVersionInformation.AnnotationMessage,
+                repositoryVersionInformation.CommitsSinceLastTaggedVersion,
+                repositoryVersionInformation.PrereleaseOverride);
+            return version;
+        }
+
+        private void WriteAssemblyInfoContaining(VersionInformation version)
+        {
+            string versionAssemblyInfo = string.Format(
+                @"using System;
+using System.Reflection;
+
+[assembly: AssemblyVersion(""{0}"")]
+[assembly: AssemblyFileVersion(""{0}"")]
+[assembly: AssemblyInformationalVersion(""{1}"")]
+", version.Version, version.InformationalVersion);
+
+            string tempFolder = Path.Combine(Path.GetTempPath(), "Appccelerate.VersionTask");
+
+            if (!Directory.Exists(tempFolder))
+            {
+                Directory.CreateDirectory(tempFolder);
+            }
+
+            foreach (string tempFilePath in Directory.GetFiles(tempFolder))
+            {
+                try
+                {
+                    // we cannot delete just all files because they might be used in other projects currently built
+                    if (File.GetLastWriteTime(tempFilePath) < DateTime.Now.AddDays(-1))
+                    {
+                        File.Delete(tempFilePath);
+                    }
+                }
+                    // ReSharper disable once EmptyGeneralCatchClause
+                catch
+                {
+                    // try next time
+                }
+            }
+
+            var tempFileName = string.Format(
+                "AssemblyInfo_{0}_{1}.g.cs",
+                Path.GetFileNameWithoutExtension(this.ProjectFile),
+                Path.GetRandomFileName());
+            this.TempAssemblyInfoFilePath = Path.Combine(tempFolder, tempFileName);
+            File.WriteAllText(this.TempAssemblyInfoFilePath, versionAssemblyInfo);
         }
     }
 }
