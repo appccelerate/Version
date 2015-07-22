@@ -64,8 +64,7 @@ namespace Appccelerate.VersionTask
                 this.Log.LogMessage(MessageImportance.Normal, "PrereleaseOverride:" + repositoryVersionInformation.PrereleaseOverride);
 
                 string versionAssemblyInfo = string.Format(
-@"
-using System;
+@"using System;
 using System.Reflection;
 
 [assembly: AssemblyVersion(""{0}"")]
