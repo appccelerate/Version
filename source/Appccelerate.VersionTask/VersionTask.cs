@@ -97,7 +97,9 @@ using System.Reflection;
 [assembly: AssemblyVersion(""{0}"")]
 [assembly: AssemblyFileVersion(""{0}"")]
 [assembly: AssemblyInformationalVersion(""{1}"")]
-", version.Version, version.InformationalVersion);
+", 
+                version.Version, 
+                version.InformationalVersion);
 
             string tempFolder = Path.Combine(Path.GetTempPath(), "Appccelerate.VersionTask");
 
