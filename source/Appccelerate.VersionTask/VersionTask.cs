@@ -91,7 +91,8 @@ namespace Appccelerate.VersionTask
         private void WriteAssemblyInfoContaining(VersionInformation version)
         {
             string versionAssemblyInfo = string.Format(
-                @"using System;
+                @"// created by Appccelerate.VersionTask
+using System;
 using System.Reflection;
 
 [assembly: AssemblyVersion(""{0}"")]
