@@ -23,6 +23,7 @@
     <file src="bin\Release\Appccelerate.VersionCore.dll" target="" />
     <file src="bin\Release\Appccelerate.VersionCore.pdb" target="" />
     <file src="bin\Release\LibGit2Sharp.dll" target="" />
+    <file src="bin\Release\Newtonsoft.Json.dll" target="" />
     <file src="bin\Release\NativeBinaries\amd64\git2-69db893.dll" target="NativeBinaries\amd64\" />
     <file src="bin\Release\NativeBinaries\amd64\git2-69db893.pdb" target="NativeBinaries\amd64\" />
     <file src="bin\Release\NativeBinaries\x86\git2-69db893.dll" target="NativeBinaries\x86\" />
