@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="VersionInformation.cs" company="Appccelerate">
+// <copyright file="VersionTagParser.cs" company="Appccelerate">
 //   Copyright (c) 2008-2014
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,29 +18,20 @@
 
 namespace Appccelerate.Version
 {
-    using System;
-
-    public struct VersionInformation
+    public class VersionTagParser
     {
-        public VersionInformation(
-            Version version, 
-            Version fileVersion, 
-            string nugetVersion, 
-            string informationalVersion)
-            : this()
+        public VersionTag Parse(string versionTag)
         {
-            this.Version = version;
-            this.FileVersion = fileVersion;
-            this.InformationalVersion = informationalVersion;
-            this.NugetVersion = nugetVersion;
+            string[] splittedTag = versionTag.Split(' ');
+            
+            string version = splittedTag[0].Substring(2);
+            string fileVersion = version;
+            if (splittedTag.Length > 1)
+            {
+                fileVersion = splittedTag[1].Substring(3);
+            }
+
+            return new VersionTag(version, fileVersion);
         }
-
-        public Version Version { get; private set; }
-
-        public Version FileVersion { get; private set; }
-
-        public string NugetVersion { get; private set; }
-
-        public string InformationalVersion { get; set; }
     }
 }

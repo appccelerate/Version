@@ -63,6 +63,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\GlobalAssemblyInfo.cs" />
+    <Compile Include="VersionTagParserFacts.cs" />
     <Compile Include="VersionCalculatorFacts.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

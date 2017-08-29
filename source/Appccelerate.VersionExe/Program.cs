@@ -34,7 +34,7 @@ namespace Appccelerate.Version
                     output = args[2];
                 }
 
-                var repositoryVersionInformationLoader = new RepositoryVersionInformationLoader();
+                var repositoryVersionInformationLoader = new RepositoryVersionInformationLoader(new VersionTagParser());
 
                 RepositoryVersionInformation repositoryVersionInformation = repositoryVersionInformationLoader.GetRepositoryVersionInformation(startingPath);
                 
@@ -42,6 +42,7 @@ namespace Appccelerate.Version
 
                 var version = calculator.CalculateVersion(
                     repositoryVersionInformation.LastTaggedVersion,
+                    repositoryVersionInformation.LastTaggedFileVersion,
                     repositoryVersionInformation.AnnotationMessage,
                     repositoryVersionInformation.CommitsSinceLastTaggedVersion,
                     repositoryVersionInformation.PrereleaseOverride);
@@ -50,6 +51,7 @@ namespace Appccelerate.Version
                 {
                     Console.WriteLine("{");
                     Console.WriteLine("\"Version\": \"" + version.Version + "\",");
+                    Console.WriteLine("\"FileVersion\": \"" + version.FileVersion + "\",");
                     Console.WriteLine("\"NugetVersion\": \"" + version.NugetVersion + "\",");
                     Console.WriteLine("\"InformationalVersion\": \"" + version.InformationalVersion + "\"");
                     Console.WriteLine("}");
