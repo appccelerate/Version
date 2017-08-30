@@ -18,19 +18,22 @@
 
 namespace Appccelerate.Version
 {
+    using System.Text.RegularExpressions;
+
     public class VersionTagParser
     {
+        private static readonly Regex VersionRegex = 
+            new Regex(@"\bv=(?<version>[^ ]*)(\s*fv=(?<fileVersion>[^ ]*))?", RegexOptions.Compiled);
+
         public VersionTag Parse(string versionTag)
         {
-            string[] splittedTag = versionTag.Split(' ');
-            
-            string version = splittedTag[0].Substring(2);
-            string fileVersion = version;
-            if (splittedTag.Length > 1)
-            {
-                fileVersion = splittedTag[1].Substring(3);
-            }
+            Match match = VersionRegex.Match(versionTag);
 
+            string version = match.Groups["version"].Value;
+
+            var matchGroup = match.Groups["fileVersion"];
+            string fileVersion = matchGroup.Success ? matchGroup.Value : version;
+            
             return new VersionTag(version, fileVersion);
         }
     }

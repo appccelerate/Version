@@ -18,8 +18,6 @@
 
 namespace Appccelerate.Version.Facts
 {
-    using System;
-
     using FluentAssertions;
 
     using Xunit;
