@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="VersionInformation.cs" company="Appccelerate">
+// <copyright file="VersionTagParser.cs" company="Appccelerate">
 //   Copyright (c) 2008-2014
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,29 +18,23 @@
 
 namespace Appccelerate.Version
 {
-    using System;
+    using System.Text.RegularExpressions;
 
-    public struct VersionInformation
+    public class VersionTagParser
     {
-        public VersionInformation(
-            Version version, 
-            Version fileVersion, 
-            string nugetVersion, 
-            string informationalVersion)
-            : this()
+        private static readonly Regex VersionRegex = 
+            new Regex(@"\bv=(?<version>[^ ]*)(\s*fv=(?<fileVersion>[^ ]*))?", RegexOptions.Compiled);
+
+        public VersionTag Parse(string versionTag)
         {
-            this.Version = version;
-            this.FileVersion = fileVersion;
-            this.InformationalVersion = informationalVersion;
-            this.NugetVersion = nugetVersion;
+            Match match = VersionRegex.Match(versionTag);
+
+            string version = match.Groups["version"].Value;
+
+            var matchGroup = match.Groups["fileVersion"];
+            string fileVersion = matchGroup.Success ? matchGroup.Value : version;
+            
+            return new VersionTag(version, fileVersion);
         }
-
-        public Version Version { get; private set; }
-
-        public Version FileVersion { get; private set; }
-
-        public string NugetVersion { get; private set; }
-
-        public string InformationalVersion { get; set; }
     }
 }

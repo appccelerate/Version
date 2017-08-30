@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="VersionInformation.cs" company="Appccelerate">
+// <copyright file="VersionTag.cs" company="Appccelerate">
 //   Copyright (c) 2008-2014
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,29 +18,16 @@
 
 namespace Appccelerate.Version
 {
-    using System;
-
-    public struct VersionInformation
+    public struct VersionTag
     {
-        public VersionInformation(
-            Version version, 
-            Version fileVersion, 
-            string nugetVersion, 
-            string informationalVersion)
-            : this()
+        public VersionTag(string version, string fileVersion) : this()
         {
             this.Version = version;
             this.FileVersion = fileVersion;
-            this.InformationalVersion = informationalVersion;
-            this.NugetVersion = nugetVersion;
         }
 
-        public Version Version { get; private set; }
+        public string Version { get; private set; }
 
-        public Version FileVersion { get; private set; }
-
-        public string NugetVersion { get; private set; }
-
-        public string InformationalVersion { get; set; }
+        public string FileVersion { get; private set; }
     }
 }

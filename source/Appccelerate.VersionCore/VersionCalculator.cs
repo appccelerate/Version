@@ -28,8 +28,9 @@ namespace Appccelerate.Version
 
         public VersionInformation CalculateVersion(
             string versionPattern, 
+            string fileVersionPattern, 
             string informationalVersionPattern, 
-            int commitsSinceLastTaggedVersion,
+            int commitsSinceLastTaggedVersion, 
             string prereleaseVersionOverride)
         {
             informationalVersionPattern = informationalVersionPattern ?? string.Empty;
@@ -37,22 +38,7 @@ namespace Appccelerate.Version
             int commentIndex = versionPattern.IndexOf('#');
             versionPattern = commentIndex > 0 ? versionPattern.Substring(0, commentIndex) : versionPattern;
             
-            Match match = PlaceholderRegex.Match(versionPattern);
-            if (match.Success)
-            {
-                int placeholderLength = match.Value.Length;
-                int baseNumber = int.Parse(match.Value);
-                int calculatedNumber = baseNumber + commitsSinceLastTaggedVersion;
-                string paddedCalculatedNumber = calculatedNumber.ToString(new string('0', placeholderLength));
-                versionPattern = versionPattern.Replace("{" + match.Value + "}", paddedCalculatedNumber);
-            }
-            else
-            {
-                if (commitsSinceLastTaggedVersion > 0)
-                {
-                    throw new InvalidOperationException(FormatCannotVersionDueToMissingCommitsCountingPlaceholderExceptionMessage(versionPattern));
-                }
-            }
+            versionPattern = ReplaceCommitCountPlaceholder(versionPattern, commitsSinceLastTaggedVersion);
 
             int dashIndex = versionPattern.IndexOf('-');
             string prerelease = dashIndex > 0 ? versionPattern.Substring(dashIndex + 1) : string.Empty;
@@ -61,29 +47,64 @@ namespace Appccelerate.Version
 
             string version = dashIndex > 0 ? versionPattern.Substring(0, dashIndex) : versionPattern;
 
-            for (int i = version.Count(c => c == '.'); i < 3; i++)
-            {
-                version += ".0";
-            }
+            string normalizedVersion = NormalizeVersion(version);
+
+            string fileVersion = ReplaceCommitCountPlaceholder(fileVersionPattern, commitsSinceLastTaggedVersion);
+            string normalizedFileVersion = NormalizeVersion(fileVersion);
 
             int j = 0;
-            int thirdDotIndex = version
+            int thirdDotIndex = normalizedVersion
                 .Select(c => new { Index = j++, Char = c })
                 .Where(x => x.Char == '.')
                 .Skip(2)
                 .Select(x => x.Index)
                 .Single();
 
-            string nugetVersion = version.Substring(0, thirdDotIndex) + (prerelease.Any() ? "-" + prerelease : string.Empty);
+            string nugetVersion = normalizedVersion.Substring(0, thirdDotIndex) + (prerelease.Any() ? "-" + prerelease : string.Empty);
 
             string informationalVersion = informationalVersionPattern
-                .Replace("{version}", version)
+                .Replace("{version}", normalizedVersion)
                 .Replace("{nugetVersion}", nugetVersion);
             
             return new VersionInformation(
-                Version.Parse(version),
+                Version.Parse(normalizedVersion),
+                Version.Parse(normalizedFileVersion),
                 nugetVersion,
                 informationalVersion);
+        }
+
+        private static string ReplaceCommitCountPlaceholder(string pattern, int commitsSinceLastTaggedVersion)
+        {
+            Match match = PlaceholderRegex.Match(pattern);
+            if (match.Success)
+            {
+                int placeholderLength = match.Value.Length;
+                int baseNumber = int.Parse(match.Value);
+                int calculatedNumber = baseNumber + commitsSinceLastTaggedVersion;
+                string paddedCalculatedNumber = calculatedNumber.ToString(new string('0', placeholderLength));
+                pattern = pattern.Replace("{" + match.Value + "}", paddedCalculatedNumber);
+            }
+            else
+            {
+                if (commitsSinceLastTaggedVersion > 0)
+                {
+                    throw new InvalidOperationException(
+                        FormatCannotVersionDueToMissingCommitsCountingPlaceholderExceptionMessage(pattern));
+                }
+            }
+
+            return pattern;
+        }
+
+        private static string NormalizeVersion(string version)
+        {
+            string normalizedVersion = version;
+            for (int i = normalizedVersion.Count(c => c == '.'); i < 3; i++)
+            {
+                normalizedVersion += ".0";
+            }
+
+            return normalizedVersion;
         }
 
         public static string FormatCannotVersionDueToMissingCommitsCountingPlaceholderExceptionMessage(string versionPattern)
