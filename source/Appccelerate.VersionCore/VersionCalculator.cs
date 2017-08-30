@@ -103,6 +103,7 @@ namespace Appccelerate.Version
             {
                 normalizedVersion += ".0";
             }
+
             return normalizedVersion;
         }
 

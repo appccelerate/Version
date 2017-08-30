@@ -62,6 +62,7 @@ namespace Appccelerate.Version.Facts
 
             result.Should().Be(new VersionInformation(new Version(expectedVersion), new Version(expectedFileVersion), expectedNugetVersion, string.Empty));
         }
+
         [Theory]
         [InlineData("1")]
         [InlineData("1.0")]
