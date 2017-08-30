@@ -21,6 +21,7 @@ namespace Appccelerate.Version.Facts
     using FluentAssertions;
 
     using Xunit;
+    using Xunit.Extensions;
 
     public class VersionTagParserFacts
     {
@@ -30,17 +31,18 @@ namespace Appccelerate.Version.Facts
         {
             this.testee = new VersionTagParser();
         }
-
-        [Fact]
-        public void ReturnsParsedVersionTag()
+        
+        [Theory]
+        [InlineData("4.{2}-alpha001", "4.{2}.0")]
+        [InlineData("11.{13}.0.0", "11.{0}.0")]
+        [InlineData("5.0-alpha{0001}#comment", "5.{0}.0")]
+        public void ReturnsParsedVersionTag(string expectedVersion, string expectedFileVersion)
         {
-            const string ExpectedFileVersion = "fileVersion";
-            const string ExpectedVersion = "version";
-            string versionTag = "v=" + ExpectedVersion + " fv=" + ExpectedFileVersion;
+            string versionTag = "v=" + expectedVersion + " fv=" + expectedFileVersion;
 
             VersionTag result = this.testee.Parse(versionTag);
 
-            result.Should().Be(new VersionTag(ExpectedVersion, ExpectedFileVersion));
+            result.Should().Be(new VersionTag(expectedVersion, expectedFileVersion));
         }
 
         [Fact]
