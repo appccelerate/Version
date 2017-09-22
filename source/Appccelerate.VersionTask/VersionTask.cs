@@ -69,7 +69,7 @@ namespace Appccelerate.VersionTask
         {
             string startingPath = this.SolutionDirectory;
 
-            var repositoryVersionInformationLoader = new RepositoryVersionInformationLoader();
+            var repositoryVersionInformationLoader = new RepositoryVersionInformationLoader(new VersionTagParser());
 
             RepositoryVersionInformation repositoryVersionInformation =
                 repositoryVersionInformationLoader.GetRepositoryVersionInformation(startingPath);
@@ -82,6 +82,7 @@ namespace Appccelerate.VersionTask
 
             var version = calculator.CalculateVersion(
                 repositoryVersionInformation.LastTaggedVersion,
+                repositoryVersionInformation.LastTaggedFileVersion,
                 repositoryVersionInformation.AnnotationMessage,
                 repositoryVersionInformation.CommitsSinceLastTaggedVersion,
                 repositoryVersionInformation.PrereleaseOverride);
@@ -96,10 +97,11 @@ using System;
 using System.Reflection;
 
 [assembly: AssemblyVersion(""{0}"")]
-[assembly: AssemblyFileVersion(""{0}"")]
-[assembly: AssemblyInformationalVersion(""{1}"")]
+[assembly: AssemblyFileVersion(""{1}"")]
+[assembly: AssemblyInformationalVersion(""{2}"")]
 ", 
-                version.Version, 
+                version.Version,
+                version.FileVersion,
                 version.InformationalVersion);
 
             string tempFolder = Path.Combine(Path.GetTempPath(), "Appccelerate.VersionTask");

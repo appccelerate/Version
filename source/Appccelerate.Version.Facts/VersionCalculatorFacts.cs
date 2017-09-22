@@ -40,53 +40,70 @@ namespace Appccelerate.Version.Facts
         [InlineData("1.0.0")]
         public void AddsMissingVersionPartsAsZeros(string versionPattern)
         {
-            VersionInformation result = this.testee.CalculateVersion(versionPattern, null, 0, null);
+            VersionInformation result = this.testee.CalculateVersion(versionPattern, "2.0.0.0", null, 0, null);
 
-            result.Should().Be(new VersionInformation(new Version("1.0.0.0"), "1.0.0", string.Empty));
+            result.Should().Be(new VersionInformation(new Version("1.0.0.0"), new Version("2.0.0.0"), "1.0.0", string.Empty));
         }
 
         [Theory]
-        [InlineData("1.{0}", 0, "1.0.0.0", "1.0.0")]
-        [InlineData("1.2.{0}", 0, "1.2.0.0", "1.2.0")]
-        [InlineData("1.{2}.3", 0, "1.2.3.0", "1.2.3")]
-        [InlineData("1.{2}", 5, "1.7.0.0", "1.7.0")]
-        public void ReplacesPlaceholderWithNumberOfCommitsSinceVersionTaggedCommit(string versionPatterm, int commitsSinceVersionTaggedCommit, string expectedVersion, string expectedNugetVersion)
+        [InlineData("1.{0}", "3.{0}", 0, "1.0.0.0", "3.0.0.0", "1.0.0")]
+        [InlineData("1.2.{0}", "4.5.{0}", 0, "1.2.0.0", "4.5.0.0", "1.2.0")]
+        [InlineData("1.{2}.3", "4.{5}.6", 0, "1.2.3.0", "4.5.6.0", "1.2.3")]
+        [InlineData("1.{2}", "4.{5}", 5, "1.7.0.0", "4.10.0.0", "1.7.0")]
+        public void ReplacesPlaceholderWithNumberOfCommitsSinceVersionTaggedCommit(
+            string versionPattern, 
+            string fileVersionPattern,
+            int commitsSinceVersionTaggedCommit, 
+            string expectedVersion, 
+            string expectedFileVersion, 
+            string expectedNugetVersion)
         {
-            VersionInformation result = this.testee.CalculateVersion(versionPatterm, null, commitsSinceVersionTaggedCommit, null);
+            VersionInformation result = this.testee.CalculateVersion(versionPattern, fileVersionPattern, null, commitsSinceVersionTaggedCommit, null);
 
-            result.Should().Be(new VersionInformation(new Version(expectedVersion), expectedNugetVersion, string.Empty));
+            result.Should().Be(new VersionInformation(new Version(expectedVersion), new Version(expectedFileVersion), expectedNugetVersion, string.Empty));
         }
 
+        [Theory]
+        [InlineData("1")]
+        [InlineData("1.0")]
+        [InlineData("1.0.0")]
+        public void AddsMissingFileVersionPartsAsZeros(string fileVersionPattern)
+        {
+            VersionInformation result = this.testee.CalculateVersion("2.0.0.0", fileVersionPattern, null, 0, null);
+
+            result.Should().Be(new VersionInformation(new Version("2.0.0.0"), new Version("1.0.0.0"), "2.0.0", string.Empty));
+        }
+        
         [Fact]
         public void KeepsFormattingOfPlaceholder()
         {
-            VersionInformation result = this.testee.CalculateVersion("1-pre{0002}", null, 125, null);
+            VersionInformation result = this.testee.CalculateVersion("1-pre{0002}", "1.0.{0}.0", null, 125, null);
 
-            result.Should().Be(new VersionInformation(new Version("1.0.0.0"), "1.0.0-pre0127", string.Empty));
+            result.Should().Be(new VersionInformation(new Version("1.0.0.0"), new Version("1.0.125.0"), "1.0.0-pre0127", string.Empty));
         }
 
         [Fact]
         public void SupportsNugetPreReleaseVersions()
         {
-            VersionInformation result = this.testee.CalculateVersion("1.2.3-pre", null, 0, null);
+            VersionInformation result = this.testee.CalculateVersion("1.2.3-pre", "2.0.0.0", null, 0, null);
 
-            result.Should().Be(new VersionInformation(new Version("1.2.3.0"), "1.2.3-pre", string.Empty));
+            result.Should().Be(new VersionInformation(new Version("1.2.3.0"), new Version("2.0.0.0"), "1.2.3-pre", string.Empty));
         }
 
         [Fact]
         public void SupportsNugetPreReleaseVersionsWithCommitsCountingInPrereleasePart()
         {
-            VersionInformation result = this.testee.CalculateVersion("1.2.3-pre{2}", null, 3, null);
+            VersionInformation result = this.testee.CalculateVersion("1.2.3-pre{2}", "2.0.{0}.0", null, 3, null);
 
-            result.Should().Be(new VersionInformation(new Version("1.2.3.0"), "1.2.3-pre5", string.Empty));
+            result.Should().Be(new VersionInformation(new Version("1.2.3.0"), new Version("2.0.3.0"), "1.2.3-pre5", string.Empty));
         }
 
         [Fact]
         public void SupportsNugetPreReleaseVersionsWithCommitsCountingInVersionPart()
         {
-            VersionInformation result = this.testee.CalculateVersion("1.{2}.3-pre", null, 3, null);
+            VersionInformation result = this.testee.CalculateVersion("1.{2}.3-pre", "2.0.{0}.0", null, 3, null);
 
-            result.Should().Be(new VersionInformation(new Version("1.5.3.0"), "1.5.3-pre", string.Empty));
+            result.Should().Be(new VersionInformation(new Version("1.5.3.0"), new Version("2.0.3.0"), "1.5.3-pre", string.Empty));
         }
 
         [Theory]
@@ -94,41 +111,41 @@ namespace Appccelerate.Version.Facts
         [InlineData("1.2-pre#comment", "1.2.0.0", "1.2.0-pre")]
         public void IgnoresComments(string versionPattern, string expectedVersion, string expectedNugetVersion)
         {
-            VersionInformation result = this.testee.CalculateVersion(versionPattern, null, 0, null);
+            VersionInformation result = this.testee.CalculateVersion(versionPattern, "2.0.0.0", null, 0, null);
 
-            result.Should().Be(new VersionInformation(new Version(expectedVersion), expectedNugetVersion, string.Empty));
+            result.Should().Be(new VersionInformation(new Version(expectedVersion), new Version("2.0.0.0"), expectedNugetVersion, string.Empty));
         }
 
         [Fact]
         public void ReplacesVersionPlaceholderInInformationalVersion()
         {
-            VersionInformation result = this.testee.CalculateVersion("1.{2}.3-pre", "RC 1 {version}", 3, null);
+            VersionInformation result = this.testee.CalculateVersion("1.{2}.3-pre", "2.0.{0}.0", "RC 1 {version}", 3, null);
 
-            result.Should().Be(new VersionInformation(new Version("1.5.3.0"), "1.5.3-pre", "RC 1 1.5.3.0"));
+            result.Should().Be(new VersionInformation(new Version("1.5.3.0"), new Version("2.0.3.0"),  "1.5.3-pre", "RC 1 1.5.3.0"));
         }
 
         [Fact]
         public void ReplacesNugetVersionPlaceholderInInformationalVersion()
         {
-            VersionInformation result = this.testee.CalculateVersion("1.{2}.3-pre", "RC 1 {nugetVersion}", 3, null);
+            VersionInformation result = this.testee.CalculateVersion("1.{2}.3-pre", "2.0.{0}.0", "RC 1 {nugetVersion}", 3, null);
 
-            result.Should().Be(new VersionInformation(new Version("1.5.3.0"), "1.5.3-pre", "RC 1 1.5.3-pre"));
+            result.Should().Be(new VersionInformation(new Version("1.5.3.0"), new Version("2.0.3.0"), "1.5.3-pre", "RC 1 1.5.3-pre"));
         }
 
         [Fact]
         public void AddsPrereleaseInformation_WhenItIsAPullRequest()
         {
-            VersionInformation result = this.testee.CalculateVersion("1.{2}", null, 0, "override");
+            VersionInformation result = this.testee.CalculateVersion("1.{2}", "2.0.{0}.0", null, 0, "override");
 
-            result.Should().Be(new VersionInformation(new Version("1.2.0.0"), "1.2.0-override", string.Empty));
+            result.Should().Be(new VersionInformation(new Version("1.2.0.0"), new Version("2.0.0.0"), "1.2.0-override", string.Empty));
         }
 
         [Fact]
         public void ReplacesPrereleaseInformation_WhenItIsAPullRequest()
         {
-            VersionInformation result = this.testee.CalculateVersion("1.{2}-pre", null, 0, "override");
+            VersionInformation result = this.testee.CalculateVersion("1.{2}-pre", "2.0.0.0", null, 0, "override");
 
-            result.Should().Be(new VersionInformation(new Version("1.2.0.0"), "1.2.0-override", string.Empty));
+            result.Should().Be(new VersionInformation(new Version("1.2.0.0"), new Version("2.0.0.0"), "1.2.0-override", string.Empty));
         }
 
         [Fact]
@@ -136,9 +153,9 @@ namespace Appccelerate.Version.Facts
         {
             const string Version = "1.2.3.0";
 
-            VersionInformation result = this.testee.CalculateVersion(Version, null, 0, null);
+            VersionInformation result = this.testee.CalculateVersion(Version, "2.0.0.0", null, 0, null);
 
-            result.Should().Be(new VersionInformation(new Version(Version), "1.2.3", string.Empty));
+            result.Should().Be(new VersionInformation(new Version(Version), new Version("2.0.0.0"), "1.2.3", string.Empty));
         }
 
         [Fact]
@@ -146,7 +163,7 @@ namespace Appccelerate.Version.Facts
         {
             const string VersionPattern = "1.2.3.0";
 
-            Action action = () => this.testee.CalculateVersion(VersionPattern, null, 1, null);
+            Action action = () => this.testee.CalculateVersion(VersionPattern, "2.0.0.0", null, 1, null);
 
             action.ShouldThrow<InvalidOperationException>()
                 .And.Message.Should().Be(VersionCalculator.FormatCannotVersionDueToMissingCommitsCountingPlaceholderExceptionMessage(VersionPattern));

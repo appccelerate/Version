@@ -26,6 +26,13 @@ namespace Appccelerate.Version
 
     public class RepositoryVersionInformationLoader
     {
+        private readonly VersionTagParser versionTagParser;
+
+        public RepositoryVersionInformationLoader(VersionTagParser versionTagParser)
+        {
+            this.versionTagParser = versionTagParser;
+        }
+
         public RepositoryVersionInformation GetRepositoryVersionInformation(string startingPath)
         {
             string repositoryPath = Repository.Discover(startingPath);
@@ -48,8 +55,11 @@ namespace Appccelerate.Version
             int commits = CountCommitsSinceVersionTag(repository, lastTaggedCommit);
             string prereleaseOverride = DeterminePrereleaseOverride(repository);
 
+            VersionTag versionTag = this.versionTagParser.Parse(latestVersionTag.Name);
+
             return new RepositoryVersionInformation(
-                latestVersionTag.Name.Substring(2),
+                versionTag.Version,
+                versionTag.FileVersion,
                 commits,
                 latestVersionTag.IsAnnotated ? latestVersionTag.Annotation.Message.Replace("\n", string.Empty).Replace("\r", string.Empty) : string.Empty,
                 prereleaseOverride);

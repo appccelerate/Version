@@ -51,6 +51,8 @@
     <Compile Include="RepositoryVersionInformationLoader.cs" />
     <Compile Include="VersionCalculator.cs" />
     <Compile Include="VersionInformation.cs" />
+    <Compile Include="VersionTag.cs" />
+    <Compile Include="VersionTagParser.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="NuGet.config" />

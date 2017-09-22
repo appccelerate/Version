@@ -22,18 +22,22 @@ namespace Appccelerate.Version
     {
         public RepositoryVersionInformation(
             string lastTaggedVersion, 
+            string lastTaggedFileVersion, 
             int commitsSinceLastTaggedVersion, 
             string annotationMessage, 
             string prereleaseOverride)
             : this()
         {
             this.LastTaggedVersion = lastTaggedVersion;
+            this.LastTaggedFileVersion = lastTaggedFileVersion;
             this.CommitsSinceLastTaggedVersion = commitsSinceLastTaggedVersion;
             this.AnnotationMessage = annotationMessage;
             this.PrereleaseOverride = prereleaseOverride;
         }
 
         public string LastTaggedVersion { get; private set; }
+
+        public string LastTaggedFileVersion { get; private set; }
 
         public string AnnotationMessage { get; private set; }
 
