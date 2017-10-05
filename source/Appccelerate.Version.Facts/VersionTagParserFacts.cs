@@ -38,7 +38,7 @@ namespace Appccelerate.Version.Facts
         [InlineData("5.0-alpha{0001}#comment", "5.{0}.0")]
         public void ReturnsParsedVersionTag(string expectedVersion, string expectedFileVersion)
         {
-            string versionTag = "v=" + expectedVersion + " fv=" + expectedFileVersion;
+            string versionTag = $"v={expectedVersion};fv={expectedFileVersion}";
 
             VersionTag result = this.testee.Parse(versionTag);
 
@@ -49,7 +49,7 @@ namespace Appccelerate.Version.Facts
         public void SetFileVersionToVersionWhenTagContainsNoFileVersion()
         {
             const string ExpectedVersion = "version";
-            string versionTag = "v=" + ExpectedVersion;
+            string versionTag = $"v={ExpectedVersion}";
 
             VersionTag result = this.testee.Parse(versionTag);
 

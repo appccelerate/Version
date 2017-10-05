@@ -23,7 +23,7 @@ namespace Appccelerate.Version
     public class VersionTagParser
     {
         private static readonly Regex VersionRegex = 
-            new Regex(@"\bv=(?<version>[^ ]*)(\s*fv=(?<fileVersion>[^ ]*))?", RegexOptions.Compiled);
+            new Regex(@"\bv=(?<version>[^;]*)(;fv=(?<fileVersion>[^ ]*))?", RegexOptions.Compiled);
 
         public VersionTag Parse(string versionTag)
         {
