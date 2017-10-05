@@ -27,17 +27,17 @@ namespace Appccelerate.Version
         private static readonly Regex PlaceholderRegex = new Regex(@"(?<=\{)[0-9]+(?=\})", RegexOptions.Compiled);
 
         public VersionInformation CalculateVersion(
-            string versionPattern, 
-            string fileVersionPattern, 
-            string informationalVersionPattern, 
-            int commitsSinceLastTaggedVersion, 
+            string versionPattern,
+            string fileVersionPattern,
+            string informationalVersionPattern,
+            int commitsSinceLastTaggedVersion,
             string prereleaseVersionOverride)
         {
             informationalVersionPattern = informationalVersionPattern ?? string.Empty;
 
             int commentIndex = versionPattern.IndexOf('#');
             versionPattern = commentIndex > 0 ? versionPattern.Substring(0, commentIndex) : versionPattern;
-            
+
             versionPattern = ReplaceCommitCountPlaceholder(versionPattern, commitsSinceLastTaggedVersion);
 
             int dashIndex = versionPattern.IndexOf('-');
@@ -65,7 +65,7 @@ namespace Appccelerate.Version
             string informationalVersion = informationalVersionPattern
                 .Replace("{version}", normalizedVersion)
                 .Replace("{nugetVersion}", nugetVersion);
-            
+
             return new VersionInformation(
                 Version.Parse(normalizedVersion),
                 Version.Parse(normalizedFileVersion),

@@ -66,7 +66,7 @@ namespace Appccelerate.VersionTask
             catch (Exception exception)
             {
                 this.Log.LogErrorFromException(exception);
-                
+
                 return false;
             }
         }
@@ -109,26 +109,25 @@ using System.Reflection;
 [assembly: AssemblyFileVersion(""{1}"")]
 [assembly: AssemblyInformationalVersion(""{2}"")]
 /* version: {3} */
-", 
+",
                 version.Version,
                 version.FileVersion,
                 version.InformationalVersion,
                 JsonConvert.SerializeObject(version, settings));
-
-            using (XmlReader projectFileReader = XmlReader.Create(new Uri(this.ProjectFile).AbsoluteUri))
-            {
-                projectFileReader.MoveToElement();
-                var uri = projectFileReader.NamespaceURI;
-                var prefix = projectFileReader.Prefix;
-                var name = projectFileReader.Name;
-            }
 
             string tempFolder;
             using (XmlReader projectFileReader = XmlReader.Create(new Uri(this.ProjectFile).AbsoluteUri))
             {
                 var project = new Project(projectFileReader);
                 var properties = project.AllEvaluatedProperties;
-                var property = properties.Where(p => p.Name == "IntermediateOutputPath").FirstOrDefault();
+                var property = properties.FirstOrDefault(p => p.Name == "IntermediateOutputPath");
+
+                if (property == null)
+                {
+                    this.Log.LogError("Could not determine IntermediateOutputPath");
+                    throw new Exception("Could not determine IntermediateOutputPath");
+                }
+
                 tempFolder = property.EvaluatedValue;
             }
 
@@ -146,8 +145,8 @@ using System.Reflection;
                     var strtStr = "/* version: ";
                     var endStr = " */";
                     var fileText = File.ReadAllText(this.TempAssemblyInfoFilePath);
-                    var end = fileText.IndexOf(endStr);
-                    var start = fileText.IndexOf(strtStr) + strtStr.Length;
+                    var end = fileText.IndexOf(endStr, StringComparison.InvariantCulture);
+                    var start = fileText.IndexOf(strtStr, StringComparison.InvariantCulture) + strtStr.Length;
                     var text = fileText.Substring(start, end - start);
 
                     var oldVer = JsonConvert.DeserializeObject<VersionInformation>(text, settings);
@@ -160,11 +159,9 @@ using System.Reflection;
                     }
                 }
             }
-            catch (NullReferenceException)
+            catch (Exception exception)
             {
-            }
-            catch (JsonException)
-            {
+                this.Log.LogError("Could not read version from existing file. Rewriting the file. Exception:" + exception);
             }
 
             File.WriteAllText(this.TempAssemblyInfoFilePath, versionAssemblyInfo);
@@ -178,6 +175,7 @@ using System.Reflection;
                 var jobj = new JObject
                 {
                     { "Version", obj.Version.ToString(4) },
+                    { "FileVersion", obj.Version.ToString(4) },
                     { "NugetVersion", obj.NugetVersion },
                     { "InformationalVersion", obj.InformationalVersion }
                 };
@@ -194,6 +192,7 @@ using System.Reflection;
                 var obj = serializer.Deserialize(reader) as JObject;
                 return new VersionInformation(
                     new Version(obj.Value<string>("Version")),
+                    new Version(obj.Value<string>("FileVersion")),
                     obj.Value<string>("NugetVersion"),
                     obj.Value<string>("InformationalVersion"));
             }
