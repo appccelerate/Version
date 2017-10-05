@@ -37,7 +37,7 @@ namespace Appccelerate.Version
                 var repositoryVersionInformationLoader = new RepositoryVersionInformationLoader(new VersionTagParser());
 
                 RepositoryVersionInformation repositoryVersionInformation = repositoryVersionInformationLoader.GetRepositoryVersionInformation(startingPath);
-                
+
                 var calculator = new VersionCalculator();
 
                 var version = calculator.CalculateVersion(
