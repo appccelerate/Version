@@ -15,7 +15,10 @@
     <copyright>Copyright 2014</copyright>
     <tags>Appccelerate, git, version</tags>
     <developmentDependency>true</developmentDependency>
-    <dependencies/>	
+    <dependencies/>
+    <releaseNotes>
+      1.29.0: You can now specify a fileVersion in case you want it to be different from the assembly version. Use the tag in this way "v=1.{0} fv=1.1.{0}". Many thanks to Ivan Appert https://github.com/iappert.
+    </releaseNotes>
   </metadata>
   <files>
     <file src="bin\Release\Appccelerate.Version.exe" target="tools" />
@@ -27,5 +30,5 @@
     <file src="bin\Release\NativeBinaries\amd64\git2-69db893.pdb" target="tools\NativeBinaries\amd64\" />
     <file src="bin\Release\NativeBinaries\x86\git2-69db893.dll" target="tools\NativeBinaries\x86\" />
     <file src="bin\Release\NativeBinaries\x86\git2-69db893.dll" target="tools\NativeBinaries\x86\" />
-  </files>  
+  </files>
 </package>

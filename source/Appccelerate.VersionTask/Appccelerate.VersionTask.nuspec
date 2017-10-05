@@ -12,10 +12,14 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <summary>MSBuild task for automatic versioning of assemblies.</summary>
     <description>MSBuild task for automatic versioning of assemblies.</description>
-    <copyright>Copyright 2014</copyright>
+    <copyright>Copyright 2014-2017</copyright>
     <tags>Appccelerate, MSBuild</tags>
     <developmentDependency>true</developmentDependency>
-    <dependencies/>	
+    <dependencies/>
+    <releaseNotes>
+      1.32.0: VersionTask is now nicely to the incremental build feature and does not break it anymore. Many thanks to Blair L Murri https://github.com/bmurri.
+      1.29.0: You can now specify a fileVersion in case you want it to be different from the assembly version. Use the tag in this way "v=1.{0} fv=1.1.{0}". Many thanks to Ivan Appert https://github.com/iappert.
+    </releaseNotes>
   </metadata>
   <files>
     <file src="bin\Release\Appccelerate.VersionTask.dll" target="" />
@@ -29,5 +33,5 @@
     <file src="bin\Release\NativeBinaries\x86\git2-69db893.dll" target="NativeBinaries\x86\" />
     <file src="bin\Release\NativeBinaries\x86\git2-69db893.dll" target="NativeBinaries\x86\" />
     <file src="Appccelerate.VersionTask.targets" target="build" />
-  </files>  
+  </files>
 </package>
