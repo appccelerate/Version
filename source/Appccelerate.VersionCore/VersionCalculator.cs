@@ -49,7 +49,10 @@ namespace Appccelerate.Version
 
             string normalizedVersion = NormalizeVersion(version);
 
-            string fileVersion = ReplaceCommitCountPlaceholder(fileVersionPattern, commitsSinceLastTaggedVersion);
+            fileVersionPattern = ReplaceCommitCountPlaceholder(fileVersionPattern, commitsSinceLastTaggedVersion);
+            int fileVersionDashIndex = fileVersionPattern.IndexOf('-');
+
+            string fileVersion = fileVersionDashIndex > 0 ? fileVersionPattern.Substring(0, fileVersionDashIndex) : fileVersionPattern;
             string normalizedFileVersion = NormalizeVersion(fileVersion);
 
             int j = 0;
