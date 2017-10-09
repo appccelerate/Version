@@ -17,7 +17,7 @@
     <developmentDependency>true</developmentDependency>
     <dependencies/>
     <releaseNotes>
-      1.29.0: You can now specify a fileVersion in case you want it to be different from the assembly version. Use the tag in this way "v=1.{0} fv=1.1.{0}". Many thanks to Ivan Appert https://github.com/iappert.
+      1.29.0: You can now specify a fileVersion in case you want it to be different from the assembly version. Use the tag in this way "v=1.{0};fv=1.1.{0}". Many thanks to Ivan Appert https://github.com/iappert.
     </releaseNotes>
   </metadata>
   <files>
