@@ -85,7 +85,7 @@ namespace Appccelerate.Version.Facts
         [Fact]
         public void SupportsNugetPreReleaseVersions()
         {
-            VersionInformation result = this.testee.CalculateVersion("1.2.3-pre", "2.0.0.0", null, 0, null);
+            VersionInformation result = this.testee.CalculateVersion("1.2.3-pre", "2.0.0-pre", null, 0, null);
 
             result.Should().Be(new VersionInformation(new Version("1.2.3.0"), new Version("2.0.0.0"), "1.2.3-pre", string.Empty));
         }
@@ -93,17 +93,17 @@ namespace Appccelerate.Version.Facts
         [Fact]
         public void SupportsNugetPreReleaseVersionsWithCommitsCountingInPrereleasePart()
         {
-            VersionInformation result = this.testee.CalculateVersion("1.2.3-pre{2}", "2.0.{0}.0", null, 3, null);
+            VersionInformation result = this.testee.CalculateVersion("1.2.3-pre{2}", "2.0-pre{0}", null, 3, null);
 
-            result.Should().Be(new VersionInformation(new Version("1.2.3.0"), new Version("2.0.3.0"), "1.2.3-pre5", string.Empty));
+            result.Should().Be(new VersionInformation(new Version("1.2.3.0"), new Version("2.0.0.0"), "1.2.3-pre5", string.Empty));
         }
 
         [Fact]
         public void SupportsNugetPreReleaseVersionsWithCommitsCountingInVersionPart()
         {
-            VersionInformation result = this.testee.CalculateVersion("1.{2}.3-pre", "2.0.{0}.0", null, 3, null);
+            VersionInformation result = this.testee.CalculateVersion("1.{2}.3-pre", "2.{0}-pre", null, 3, null);
 
-            result.Should().Be(new VersionInformation(new Version("1.5.3.0"), new Version("2.0.3.0"), "1.5.3-pre", string.Empty));
+            result.Should().Be(new VersionInformation(new Version("1.5.3.0"), new Version("2.3.0.0"), "1.5.3-pre", string.Empty));
         }
 
         [Theory]
