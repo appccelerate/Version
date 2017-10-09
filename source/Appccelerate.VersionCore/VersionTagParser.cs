@@ -22,7 +22,7 @@ namespace Appccelerate.Version
 
     public class VersionTagParser
     {
-        private static readonly Regex VersionRegex = 
+        private static readonly Regex VersionRegex =
             new Regex(@"\bv=(?<version>[^;]*)(;fv=(?<fileVersion>[^ ]*))?", RegexOptions.Compiled);
 
         public VersionTag Parse(string versionTag)
@@ -33,7 +33,7 @@ namespace Appccelerate.Version
 
             var matchGroup = match.Groups["fileVersion"];
             string fileVersion = matchGroup.Success ? matchGroup.Value : version;
-            
+
             return new VersionTag(version, fileVersion);
         }
     }

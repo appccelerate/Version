@@ -18,6 +18,7 @@
 
 namespace Appccelerate.Version.Facts
 {
+    using System;
     using FluentAssertions;
 
     using Xunit;
@@ -31,14 +32,14 @@ namespace Appccelerate.Version.Facts
         {
             this.testee = new VersionTagParser();
         }
-        
+
         [Theory]
         [InlineData("4.{2}-alpha001", "4.{2}.0")]
         [InlineData("11.{13}.0.0", "11.{0}.0")]
         [InlineData("5.0-alpha{0001}#comment", "5.{0}.0")]
         public void ReturnsParsedVersionTag(string expectedVersion, string expectedFileVersion)
         {
-            string versionTag = $"v={expectedVersion};fv={expectedFileVersion}";
+            string versionTag = string.Format("v={0};fv={1}", expectedVersion, expectedFileVersion);
 
             VersionTag result = this.testee.Parse(versionTag);
 
@@ -49,7 +50,7 @@ namespace Appccelerate.Version.Facts
         public void SetFileVersionToVersionWhenTagContainsNoFileVersion()
         {
             const string ExpectedVersion = "version";
-            string versionTag = $"v={ExpectedVersion}";
+            string versionTag = string.Format("v={0}", ExpectedVersion);
 
             VersionTag result = this.testee.Parse(versionTag);
 
