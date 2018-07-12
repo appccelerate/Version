@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="VersionInformation.cs" company="Appccelerate">
-//   Copyright (c) 2008-2014
+//   Copyright (c) 2008-2018 Appccelerate
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -23,9 +23,9 @@ namespace Appccelerate.Version
     public struct VersionInformation
     {
         public VersionInformation(
-            Version version, 
-            Version fileVersion, 
-            string nugetVersion, 
+            Version version,
+            Version fileVersion,
+            string nugetVersion,
             string informationalVersion)
             : this()
         {

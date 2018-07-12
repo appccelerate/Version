@@ -1,103 +1,38 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{2DD20E3E-54EC-482B-98EF-A4EA57F4530C}</ProjectGuid>
-    <OutputType>Exe</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
     <RootNamespace>Appccelerate.Version</RootNamespace>
-    <AssemblyName>Appccelerate.Version</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
+    <AssemblyName>Appccelerate.VersionExe</AssemblyName>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <ApplicationIcon />
+    <OutputType>Exe</OutputType>
+    <StartupObject />
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
+
+  <ItemGroup>
+    <PackageReference Include="Appccelerate.VersionTask" Version="1.39.0" PrivateAssets="All" />
+    <PackageReference Include="Appccelerate.Development" Version="2.2.0" PrivateAssets="All" />
+    <PackageReference Include="LibGit2Sharp" Version="0.25.2.0" />
+    <PackageReference Include="StyleCop.Analyzers" Version="1.0.2" />
+  </ItemGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
+    <TreatSpecificWarningsAsErrors />
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="LibGit2Sharp, Version=0.19.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\LibGit2Sharp.0.19.0.0\lib\net40\LibGit2Sharp.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Program.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Properties\GlobalAssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
-    <None Include="Appccelerate.VersionExe.nuspec">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="NuGet.config" />
-    <None Include="packages.config" />
-    <None Include="Settings.stylecop" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Appccelerate.VersionCore\Appccelerate.VersionCore.csproj">
-      <Project>{afe40efa-d7cf-4ccd-946f-acf781749b35}</Project>
-      <Name>Appccelerate.VersionCore</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+
   <PropertyGroup>
-    <PostBuildEvent>
-if not exist "$(TargetDir)NativeBinaries" md "$(TargetDir)NativeBinaries"
-if not exist "$(TargetDir)NativeBinaries\x86" md "$(TargetDir)NativeBinaries\x86"
-xcopy /s /y /d "$(SolutionDir)packages\LibGit2Sharp.0.19.0.0\lib\net40\NativeBinaries\x86\*.*" "$(TargetDir)NativeBinaries\x86"
-if not exist "$(TargetDir)NativeBinaries\amd64" md "$(TargetDir)NativeBinaries\amd64"
-xcopy /s /y /d "$(SolutionDir)packages\LibGit2Sharp.0.19.0.0\lib\net40\NativeBinaries\amd64\*.*" "$(TargetDir)NativeBinaries\amd64"</PostBuildEvent>
+    <CodeAnalysisRuleSet>Analyzers.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\packages\StyleCop.MSBuild.4.7.49.0\build\StyleCop.MSBuild.Targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\StyleCop.MSBuild.4.7.49.0\build\StyleCop.MSBuild.Targets'))" />
-    <Error Condition="!Exists('..\packages\Appccelerate.Development.1.5.0\build\Appccelerate.development.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Appccelerate.Development.1.5.0\build\Appccelerate.development.targets'))" />
-    <Error Condition="!Exists('..\packages\Appccelerate.Development.ProductionCode.1.5.0\build\Appccelerate.development.ProductionCode.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Appccelerate.Development.ProductionCode.1.5.0\build\Appccelerate.development.ProductionCode.targets'))" />
-    <Error Condition="!Exists('..\packages\Appccelerate.CheckHintPathTask.1.8.0\build\Appccelerate.CheckHintPathTask.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Appccelerate.CheckHintPathTask.1.8.0\build\Appccelerate.CheckHintPathTask.targets'))" />
-    <Error Condition="!Exists('..\packages\Appccelerate.CheckNugetDependenciesTask.1.3.0\build\Appccelerate.CheckNugetDependenciesTask.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Appccelerate.CheckNugetDependenciesTask.1.3.0\build\Appccelerate.CheckNugetDependenciesTask.targets'))" />
-    <Error Condition="!Exists('..\packages\Appccelerate.VersionTask.1.32.0\build\Appccelerate.VersionTask.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Appccelerate.VersionTask.1.32.0\build\Appccelerate.VersionTask.targets'))" />
-  </Target>
-  <Import Project="..\packages\StyleCop.MSBuild.4.7.49.0\build\StyleCop.MSBuild.Targets" Condition="Exists('..\packages\StyleCop.MSBuild.4.7.49.0\build\StyleCop.MSBuild.Targets')" />
-  <Import Project="..\packages\Appccelerate.Development.1.5.0\build\Appccelerate.development.targets" Condition="Exists('..\packages\Appccelerate.Development.1.5.0\build\Appccelerate.development.targets')" />
-  <Import Project="..\packages\Appccelerate.Development.ProductionCode.1.5.0\build\Appccelerate.development.ProductionCode.targets" Condition="Exists('..\packages\Appccelerate.Development.ProductionCode.1.5.0\build\Appccelerate.development.ProductionCode.targets')" />
-  <Import Project="..\packages\Appccelerate.CheckHintPathTask.1.8.0\build\Appccelerate.CheckHintPathTask.targets" Condition="Exists('..\packages\Appccelerate.CheckHintPathTask.1.8.0\build\Appccelerate.CheckHintPathTask.targets')" />
-  <Import Project="..\packages\Appccelerate.CheckNugetDependenciesTask.1.3.0\build\Appccelerate.CheckNugetDependenciesTask.targets" Condition="Exists('..\packages\Appccelerate.CheckNugetDependenciesTask.1.3.0\build\Appccelerate.CheckNugetDependenciesTask.targets')" />
-  <Import Project="..\packages\Appccelerate.VersionTask.1.32.0\build\Appccelerate.VersionTask.targets" Condition="Exists('..\packages\Appccelerate.VersionTask.1.32.0\build\Appccelerate.VersionTask.targets')" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+
+  <ItemGroup>
+    <AdditionalFiles Include="Analyzers.ruleset" />
+    <AdditionalFiles Include="stylecop.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Appccelerate.VersionCore\Appccelerate.VersionCore.csproj" />
+  </ItemGroup>
+
 </Project>

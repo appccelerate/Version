@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="RepositoryVersionInformationLoader.cs" company="Appccelerate">
-//   Copyright (c) 2008-2014
+//   Copyright (c) 2008-2018 Appccelerate
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -55,7 +55,7 @@ namespace Appccelerate.Version
             int commits = CountCommitsSinceVersionTag(repository, lastTaggedCommit);
             string prereleaseOverride = DeterminePrereleaseOverride(repository);
 
-            VersionTag versionTag = this.versionTagParser.Parse(latestVersionTag.Name);
+            VersionTag versionTag = this.versionTagParser.Parse(latestVersionTag.FriendlyName);
 
             return new RepositoryVersionInformation(
                 versionTag.Version,
@@ -85,15 +85,15 @@ namespace Appccelerate.Version
 
         private static IEnumerable<Tag> FindAllVersionTags(Repository repository)
         {
-            return repository.Tags.Where(tag => tag.Name.StartsWith("v="));
+            return repository.Tags.Where(tag => tag.FriendlyName.StartsWith("v="));
         }
 
         private static int CountCommitsSinceVersionTag(Repository repository, Commit lastTaggedCommit)
         {
             var query = new CommitFilter
                             {
-                                Since = repository.Head.Tip,
-                                Until = lastTaggedCommit,
+                                IncludeReachableFrom = repository.Head.Tip,
+                                ExcludeReachableFrom = lastTaggedCommit,
                                 SortBy = CommitSortStrategies.Topological | CommitSortStrategies.Time
                             };
 

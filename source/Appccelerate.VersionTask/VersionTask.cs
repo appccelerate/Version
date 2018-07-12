@@ -1,6 +1,6 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="VersionTask.cs" company="Appccelerate">
-//   Copyright (c) 2008-2014
+//   Copyright (c) 2008-2018 Appccelerate
 //
 //   Licensed under the Apache License, Version 2.0 (the "License");
 //   you may not use this file except in compliance with the License.
@@ -16,14 +16,13 @@
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace Appccelerate.VersionTask
+namespace Appccelerate.Version
 {
     using System;
     using System.IO;
     using System.Linq;
     using System.Xml;
 
-    using Appccelerate.Version;
     using Appccelerate.VersionTask.Annotations;
 
     using Microsoft.Build.Evaluation;
@@ -36,13 +35,31 @@ namespace Appccelerate.VersionTask
     public class VersionTask : Task
     {
         [Required]
-        public string SolutionDirectory { get; [UsedImplicitly] set; }
+        public string SolutionDirectory
+        {
+            get;
+
+            [UsedImplicitly]
+            set;
+        }
 
         [Required]
-        public string ProjectFile { get; [UsedImplicitly] set; }
+        public string ProjectFile
+        {
+            get;
+
+            [UsedImplicitly]
+            set;
+        }
 
         [Output]
-        public string TempAssemblyInfoFilePath { get; [UsedImplicitly] set; }
+        public string TempAssemblyInfoFilePath
+        {
+            get;
+
+            [UsedImplicitly]
+            set;
+        }
 
         public override bool Execute()
         {
