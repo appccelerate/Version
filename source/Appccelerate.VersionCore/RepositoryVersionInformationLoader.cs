@@ -42,9 +42,10 @@ namespace Appccelerate.Version
                 throw new InvalidOperationException("The path is not part of a git repository: " + startingPath);
             }
 
-            var repository = new Repository(repositoryPath);
-
-            return this.GetRepositoryVersionInformation(repository);
+            using (var repository = new Repository(repositoryPath))
+            {
+                return this.GetRepositoryVersionInformation(repository);
+            }
         }
 
         public RepositoryVersionInformation GetRepositoryVersionInformation(Repository repository)

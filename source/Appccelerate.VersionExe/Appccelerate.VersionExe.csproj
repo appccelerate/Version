@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <TargetFramework>net47</TargetFramework>
     <RootNamespace>Appccelerate.Version</RootNamespace>
     <AssemblyName>Appccelerate.VersionExe</AssemblyName>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>

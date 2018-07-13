@@ -17,21 +17,12 @@
     <developmentDependency>true</developmentDependency>
     <dependencies/>
     <releaseNotes>
+      1.40: supports .net core as a target platform
       1.32.0: VersionTask is now nicely to the incremental build feature and does not break it anymore. Many thanks to Blair L Murri https://github.com/bmurri.
       1.29.0: You can now specify a fileVersion in case you want it to be different from the assembly version. Use the tag in this way "v=1.{0};fv=1.1.{0}". Many thanks to Ivan Appert https://github.com/iappert.
     </releaseNotes>
   </metadata>
   <files>
-    <file src="bin\Release\Appccelerate.VersionTask.dll" target="" />
-    <file src="bin\Release\Appccelerate.VersionTask.pdb" target="" />
-    <file src="bin\Release\Appccelerate.VersionCore.dll" target="" />
-    <file src="bin\Release\Appccelerate.VersionCore.pdb" target="" />
-    <file src="bin\Release\LibGit2Sharp.dll" target="" />
-    <file src="bin\Release\Newtonsoft.Json.dll" target="" />
-    <file src="bin\Release\NativeBinaries\amd64\git2-69db893.dll" target="NativeBinaries\amd64\" />
-    <file src="bin\Release\NativeBinaries\amd64\git2-69db893.pdb" target="NativeBinaries\amd64\" />
-    <file src="bin\Release\NativeBinaries\x86\git2-69db893.dll" target="NativeBinaries\x86\" />
-    <file src="bin\Release\NativeBinaries\x86\git2-69db893.dll" target="NativeBinaries\x86\" />
-    <file src="Appccelerate.VersionTask.targets" target="build" />
+    <file src="bin\Release\**" target="build" />
   </files>
 </package>

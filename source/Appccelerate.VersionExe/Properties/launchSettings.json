@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Appccelerate.VersionExe": {
+      "commandName": "Project",
+      "commandLineArgs": ". -output nugetversion"
+    }
+  }
+}
