@@ -1,29 +1,33 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net47;netcoreapp2.1</TargetFrameworks>
+    <TargetFrameworks>net47;netstandard2.0</TargetFrameworks>
     <RootNamespace>Appccelerate.Version</RootNamespace>
     <AssemblyName>Appccelerate.VersionTask</AssemblyName>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <!-- Suppresses the warnings about the package not having assemblies in lib/*/.dll.-->
+    <NoPackageAnalysis>false</NoPackageAnalysis>
+    <!-- Change the default location where NuGet will put the build output -->
+    <!--<BuildOutputTargetFolder>tasks</BuildOutputTargetFolder>-->
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
   </PropertyGroup>
 
   <ItemGroup>
-    <!--<PackageReference Include="Appccelerate.VersionTask" Version="[1.39.0]" PrivateAssets="All" />-->
-    <!--<PackageReference Include="Appccelerate.Development" Version="2.2.0" PrivateAssets="All" />-->
-    <PackageReference Include="LibGit2Sharp" Version="0.25.2.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
+    <PackageReference Include="LibGit2Sharp" Version="0.25.2" />
     <PackageReference Include="Microsoft.Build" Version="15.7.179" />
     <PackageReference Include="Microsoft.Build.Utilities.Core" Version="15.7.179" />
-    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
     <PackageReference Include="StyleCop.Analyzers" Version="1.0.2" />
   </ItemGroup>
+
+  <PropertyGroup>
+    <CodeAnalysisRuleSet>Analyzers.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
     <TreatSpecificWarningsAsErrors />
-  </PropertyGroup>
-
-  <PropertyGroup>
-    <CodeAnalysisRuleSet>Analyzers.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
 
   <ItemGroup>
@@ -32,7 +36,28 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="build\*" PackagePath="build\" />
+    <Content Include="buildMultiTargeting\*" PackagePath="buildMultiTargeting\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="buildMultiTargeting\Appccelerate.VersionTask.targets" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Appccelerate.VersionCore\Appccelerate.VersionCore.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="buildMultiTargeting\Appccelerate.VersionTask.targets">
+      <PackagePath>build\</PackagePath>
+    </Content>
+    <Content Update="build\VersionTask.props">
+      <PackagePath>buildMultiTargeting\</PackagePath>
+    </Content>
+  </ItemGroup>
+
+ 
+
 
 </Project>
