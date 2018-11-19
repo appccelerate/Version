@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" TreatAsLocalProperty="TaskFolder;TaskAssembly">
+  <PropertyGroup>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">$(MSBuildProjectDirectory)..\</SolutionDir>
+  </PropertyGroup>
+
+
+  <PropertyGroup>
+    <TaskFolder Condition=" '$(MSBuildRuntimeType)' == 'Core' ">netstandard2.0</TaskFolder>
+    <TaskFolder Condition=" '$(MSBuildRuntimeType)' != 'Core' ">net47</TaskFolder>
+    <TaskAssembly>$(MSBuildThisFileDirectory)..\lib\$(TaskFolder)\Appccelerate.VersionTask.dll</TaskAssembly>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <CoreFolder Condition=" '$(MSBuildRuntimeType)' == 'Core' ">netstandard2.0</CoreFolder>
+    <CoreFolder Condition=" '$(MSBuildRuntimeType)' != 'Core' ">net47</CoreFolder>
+    <CoreAssembly>$(MSBuildThisFileDirectory)..\lib\$(TaskFolder)\Appccelerate.VersionCore.dll</CoreAssembly>
+  </PropertyGroup>
+
+  <UsingTask
+    TaskName="VersionTask"
+    AssemblyFile="$(TaskAssembly)" />
+
+
+  <Target Name="Versioning"
+          BeforeTargets="CoreCompile">
+
+    <VersionTask
+      SolutionDirectory="$(SolutionDir)"
+      ProjectFile="$(ProjectPath)">
+
+      <Output
+        TaskParameter="TempAssemblyInfoFilePath"
+        PropertyName="TempAssemblyInfoFilePath" />
+    </VersionTask>
+
+    <ItemGroup>
+      <Compile Include="$(TempAssemblyInfoFilePath)" />
+    </ItemGroup>
+
+  </Target>
+
+</Project>
+
+

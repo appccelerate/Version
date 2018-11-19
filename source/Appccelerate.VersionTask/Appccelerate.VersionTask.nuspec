@@ -15,7 +15,10 @@
     <copyright>Copyright 2014-2017</copyright>
     <tags>Appccelerate, MSBuild</tags>
     <developmentDependency>true</developmentDependency>
-    <dependencies/>
+    <dependencies>
+      <dependency id="LibGit2Sharp" version="0.25.2.0" />
+      <dependency id="Newtonsoft.Json" version="9.0.1" />
+    </dependencies>
     <releaseNotes>
       1.40: supports .net core as a target platform
       1.32.0: VersionTask is now nicely to the incremental build feature and does not break it anymore. Many thanks to Blair L Murri https://github.com/bmurri.
@@ -23,6 +26,9 @@
     </releaseNotes>
   </metadata>
   <files>
-    <file src="bin\Release\**" target="build" />
+    <file src="bin\Release\**" target="lib"/>
+    <file src="build\**" target="build" />
+    <file src="buildMultiTargeting\**" target="buildMultiTargeting" />
   </files>
+
 </package>

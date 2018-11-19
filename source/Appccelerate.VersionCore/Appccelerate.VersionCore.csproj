@@ -16,9 +16,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Appccelerate.VersionTask" Version="1.39.0" PrivateAssets="All" />
-    <PackageReference Include="Appccelerate.Development" Version="2.2.0" PrivateAssets="All" />
-    <PackageReference Include="LibGit2Sharp" Version="0.25.2.0" />
+    <PackageReference Include="LibGit2Sharp" Version="0.25.2" />
     <PackageReference Include="StyleCop.Analyzers" Version="1.0.2" />
   </ItemGroup>
 
