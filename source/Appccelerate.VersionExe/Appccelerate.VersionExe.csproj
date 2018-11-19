@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net47</TargetFramework>
     <RootNamespace>Appccelerate.Version</RootNamespace>
-    <AssemblyName>Appccelerate.VersionExe</AssemblyName>
+    <AssemblyName>Appccelerate.Version</AssemblyName>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <ApplicationIcon />
     <OutputType>Exe</OutputType>
